@@ -1,0 +1,8 @@
+# TEST SECTION: to test this part you need to do the follwoing steps:
+1. Install dependecnies
+2. Build in (run BUILD script in package.json)
+3. Start test service (run START script in package.json)
+
+# DEPLOY SECTION: to deploye this stuff you need
+1. Build it(check 2nd step in test section)
+2. Use builder stuff where you need
