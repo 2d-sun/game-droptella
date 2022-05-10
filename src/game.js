@@ -2,6 +2,8 @@ import * as PIXI from "pixi.js";
 import Level from "./level";
 import { Entity } from "./entities/entity";
 import donates from "./labels/donates"
+import missed from "./labels/missed"
+import catched from "./labels/catched"
 import GROUPS from "./entities/groups"
 
 const style = new PIXI.TextStyle({
@@ -29,12 +31,13 @@ export class Game {
     this.entities = {
       [GROUPS.DROP]: [],
       [GROUPS.UMBRELLA]: [],
-      [GROUPS.GROUND]: [],
-      [GROUPS.EXPLOSION]: [],
+      [GROUPS.GROUND]: []
     };
 
     this.labels = {
-      donates
+      donates,
+      missed,
+      catched
     }
 
     this.started = false;
@@ -118,12 +121,17 @@ export class Game {
         this.level.init(this.app);
         this.app.mouse.init()
 
-        app.stage.addChild(this.labels.donates.text);
+        Object.keys(this.labels).forEach(label => {
+          app.stage.addChild(this.labels[label].text)
+        })
       }, 3000);
     });
   }
 
-  incrementScore() {
-    this.labels.donates.incrementAndUpdate()
+  incrementCatched() {
+    this.labels.catched.incrementAndUpdate()
+  }
+  incrementMissed() {
+    this.labels.missed.incrementAndUpdate()
   }
 }

@@ -1,15 +1,14 @@
 import Label from "./label"
 import localization from "../localization";
 
-
-class Donates extends Label {
+class Catched extends Label {
   constructor(customStyle) {
-    super(`${localization.donates}: 0`, customStyle)
+    super(`${localization.catched}: 0`, customStyle)
     this.donate = 0
-    this.text.y = 50
+    this.text.y = 200
   }
   update(newValue) {
-    this.set(`${localization.donates}: ${newValue}`)
+    this.set(`${localization.catched}: ${newValue}`)
     return this
   }
   increment() {
@@ -24,4 +23,4 @@ class Donates extends Label {
 }
 
 
-export default new Donates()
+export default new Catched()

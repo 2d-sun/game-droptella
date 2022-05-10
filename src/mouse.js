@@ -1,5 +1,6 @@
 import * as p2 from "p2";
 import Drop from "./entities/drop";
+import Ground from "./entities/ground";
 import Umbrella from "./entities/umbrella";
 
 export class MouseController {
@@ -33,9 +34,13 @@ export class MouseController {
     this.world.on("beginContact", (evt) => {
       // unmrella has collision with drop
       if (evt.bodyA.entity instanceof Umbrella && evt.bodyB.entity instanceof Drop) {
-        this._defuceDrop(evt.bodyB.entity)
+        this._catchDrop(evt.bodyB.entity)
       } else if (evt.bodyB.entity instanceof Umbrella  && evt.bodyA.entity instanceof Drop) {
-        this._defuceDrop(evt.bodyA.entity)
+        this._catchDrop(evt.bodyA.entity)
+      } else if (evt.bodyA.entity instanceof Ground && evt.bodyB.entity instanceof Drop) {
+        this._missDrop(evt.bodyB.entity)
+      } else if (evt.bodyB.entity instanceof Ground && evt.bodyA.entity instanceof Drop) {
+        this._missDrop(evt.bodyA.entity)
       }
     })
 
@@ -43,9 +48,16 @@ export class MouseController {
     this.state = MouseController.DEFAULT;
   }
 
-  _defuceDrop(entity) {
-    this.app.game.incrementScore()
+  _catchDrop(entity) {
+    this.app.game.incrementCatched()
     this.app.game.remove(entity)
+  }
+
+  _missDrop(entity) {
+    if (!entity.missed) {
+      entity.missed = true
+      this.app.game.incrementMissed()
+    }
   }
 
   setState(state) {

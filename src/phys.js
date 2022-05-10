@@ -113,8 +113,6 @@ export class Phys {
       shapes.forEach(shape => this._drawConvex(debug, shape, body))
     } else if (groupType === GROUPS.GROUND) {
       shapes.forEach(shape => this._drawPlane(debug, shape, body))
-    } else if (groupType === GROUPS.EXPLOTION) {
-      shapes.forEach(shape => this._drawExplosion(debug, shape, body))
     } else {
       for (let i = 0; i < shapes.length; i++) {
         const shape = shapes[i];
@@ -199,40 +197,6 @@ export class Phys {
     }
 
     debug.lineStyle(0.0);
-  }
-
-  _drawExplosion(debug, shape, body) {
-    const color = 0.999980154389259 * 0xffffff // almost red
-    debug.lineStyle(3.0, color, 1.0);
-    //debug.beginFill(color, 1.0);
-    debug.drawCircle(
-      -shape.position[0] * this.METER_TO_PIXEL,
-      -shape.position[1] * this.METER_TO_PIXEL,
-      shape.radius * this.METER_TO_PIXEL
-    );
-    //debug.endFill();
-    debug.lineStyle(0.0);
-    
-    // var a = body,
-    //     x = a.interpolatedPosition[0],
-    //     y = a.interpolatedPosition[1],
-    //     radius = a.shapes[0].radius;
-
-    // debug.lineStyle(10.0, body.color || 0x808080, 1.0);
-    
-    
-    //debug.save();
-    //debug.translate(x,y);  // Translate to the center
-    //debug.rotate(a.interpolatedAngle);
-
-    
-    //debug.lineTo(this.app.width - 10, 0);
-    // for(var j=0; j < 10; j++) {
-    //   var xv = a.verts[j][0],
-    //       yv = a.verts[j][1];
-    //   if(j==0) debug.moveTo(xv * this.METER_TO_PIXEL,yv * this.METER_TO_PIXEL);
-    //   else     debug.lineTo(xv * this.METER_TO_PIXEL,yv * this.METER_TO_PIXEL);
-    // }
   }
 }
 

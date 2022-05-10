@@ -1,27 +1,26 @@
 import Label from "./label"
 import localization from "../localization";
 
-
-class Donates extends Label {
+class Missed extends Label {
   constructor(customStyle) {
-    super(`${localization.donates}: 0`, customStyle)
-    this.donate = 0
-    this.text.y = 50
+    super(`${localization.missed}: 0`, customStyle)
+    this.missed = 0
+    this.text.y = 300
   }
   update(newValue) {
-    this.set(`${localization.donates}: ${newValue}`)
+    this.set(`${localization.missed}: ${newValue}`)
     return this
   }
   increment() {
-    this.donate++
+    this.missed++
     return this
   }
   incrementAndUpdate() {
     this.increment()
-    this.update(this.donate)
+    this.update(this.missed)
     return this
   }
 }
 
 
-export default new Donates()
+export default new Missed()
