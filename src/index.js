@@ -1,23 +1,16 @@
-import * as PIXI from "pixi.js";
-import spaceShipIcon from "../static/sample.png"
+import { App } from "./app";
 
-let app = new PIXI.Application({ width: 640, height: 360 });
+let app = new App();
 
-document.body.appendChild(app.view);
+document.getElementById("app").appendChild(app.view);
 
-// let spaceShip = PIXI.Sprite.from('https://pixijs.io/guides/static/images/sample.png');
-let spaceShip = PIXI.Sprite.from(spaceShipIcon);
+app.runners.onStartup.run();
 
-app.stage.addChild(spaceShip);
-
-// Add a variable to count up the seconds our demo has been running
-let elapsed = 0.0;
-// Tell our application's ticker to run a new callback every frame, passing
-// in the amount of time that has passed since the last tick
-app.ticker.add((delta) => {
-  // Add the time to our total elapsed time
-  elapsed += delta;
-  // Update the sprite's X position based on the cosine of our elapsed time.  We divide
-  // by 50 to slow the animation down a bit...
-  spaceShip.x = 100.0 + Math.cos(elapsed/50.0) * 100.0;
-});
+try {
+  if (module.hot) {
+    module.hot.dispose(function() {
+      console.log("destroyed");
+      app.destroy();
+    });
+  }
+} catch (e) {}
