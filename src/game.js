@@ -28,10 +28,14 @@ export class Game {
   constructor(app) {
     this.app = app;
 
+    this.deadHouses = []
+    this.houses = []
+
     this.entities = {
       [GROUPS.DROP]: [],
       [GROUPS.UMBRELLA]: [],
-      [GROUPS.GROUND]: []
+      [GROUPS.GROUND]: [],
+      [GROUPS.HOUSE]: this.houses
     };
 
     this.labels = {
@@ -125,6 +129,11 @@ export class Game {
           app.stage.addChild(this.labels[label].text)
         })
       }, 3000);
+
+      setInterval(() => {
+        // one house produces 1$ per second
+        this.incrementDonates(this.houses.length - this.deadHouses.length)
+      }, 1000)
     });
   }
 
@@ -133,5 +142,8 @@ export class Game {
   }
   incrementMissed() {
     this.labels.missed.incrementAndUpdate()
+  }
+  incrementDonates(income) {
+    this.labels.donates.addAndUpdate(income)
   }
 }

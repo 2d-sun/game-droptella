@@ -2,6 +2,14 @@ import * as p2 from "p2";
 import Drop from "./entities/drop";
 import Umbrella from "./entities/umbrella";
 import Ground from "./entities/ground";
+import House from "./entities/house";
+
+function getRandomInt(min, max) {
+  // min = Math.ceil(min);
+  // max = Math.floor(max);
+  // return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.random() * (max - min) + min
+}
 
 export default class LevelDrops {
   constructor(app) {
@@ -44,6 +52,17 @@ export default class LevelDrops {
     this._addUmrella(app)
 
     this._addGround(app)
+
+    this._addHouses(app)
+  }
+
+  _addHouses({game}) {
+    for (let i=0; i<50; i++) {
+      const options = {
+        position: [getRandomInt(this.options.xmin, this.options.xmax), this.options.ymin]
+      }
+      game.add(new House({options}))
+    }
   }
 
   _addGround(app) {
@@ -86,14 +105,6 @@ export default class LevelDrops {
   }
 
   async _addDrop({ game }, options = {position: [0,2], mass: 1, radius: 0.05}) {
-    
-    function getRandomInt(min, max) {
-      // min = Math.ceil(min);
-      // max = Math.floor(max);
-      // return Math.floor(Math.random() * (max - min + 1)) + min;
-      return Math.random() * (max - min) + min
-    }
-
     function getRandomIntWithStep(min, max, step) {
       let num = Math.floor(Math.random()*(max/step));
       return num * step + min;

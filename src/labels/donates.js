@@ -9,15 +9,15 @@ class Donates extends Label {
     this.text.y = 50
   }
   update(newValue) {
+    console.log("bbbb update", newValue)
     this.set(`${localization.donates}: ${newValue}`)
     return this
   }
-  increment() {
-    this.donate++
-    return this
+  add(income) {
+    this.donate += income
   }
-  incrementAndUpdate() {
-    this.increment()
+  addAndUpdate(income) {
+    this.add(income)
     this.update(this.donate)
     return this
   }

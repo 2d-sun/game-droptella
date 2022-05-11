@@ -11,7 +11,7 @@ export default class Drop extends Entity {
     this.#init(dict.options)
   }
 
-  #init({radius = 0.5, mass = 1, position = [0,0], destroyMs}) {
+  #init({radius = 0.5, mass = 50, position = [0,0], destroyMs}) {
     this.dict.body = new Body({
       mass,
       position,
