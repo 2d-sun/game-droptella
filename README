@@ -6,3 +6,34 @@
 # DEPLOY SECTION: to deploye this stuff you need
 1. Build it(check 2nd step in test section)
 2. Use builder stuff where you need
+
+
+
+# DESCIRPTION
+1. PROTECT THE HOUSES
+2. THE MORE HOUSES YOU HAVE, THE MORE DONATION THEY CAN CAN PRODUCE
+3. DROPS CAN DESTROY YOUR HOUESES
+
+# FEATURES
+1. MOVE UMBRELLA TO ABSORB DROPS DESTRUCTING POWER
+2. HOUSES SPAWNS OWER THE AVAILABLE AREA
+3. DROPS ARE FALLING FROM RANDOM PLACES
+
+
+# TODO V 1.0
+1. Add persentage to see number of destroyed houses and houses which are left
+2. Add sprites
+  1. Background
+  2. Houses
+  3. Clouds
+  4. Umbrella
+  5. Drops
+3. Add umblrella improvement after level ends
+4. Add limit of drops(reaching the limit of drops means the level is passed). If the pesentage of destroyed houses is to big it means player has lost the city.
+5. Add Reward after 10 saved cities. Video with dead enemy
+
+
+
+# TODO V 1.1
+1. Add the man who randlomly tries to mark some place
+2. Add weapon to deal with such kind of enemy.
