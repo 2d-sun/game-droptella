@@ -2,6 +2,7 @@ import * as p2 from "p2";
 import Drop from "./entities/drop";
 import Ground from "./entities/ground";
 import Umbrella from "./entities/umbrella";
+import House from "./entities/house";
 
 export class MouseController {
   constructor(app) {
@@ -41,6 +42,12 @@ export class MouseController {
         this._missDrop(evt.bodyB.entity)
       } else if (evt.bodyB.entity instanceof Ground && evt.bodyA.entity instanceof Drop) {
         this._missDrop(evt.bodyA.entity)
+      } else if (evt.bodyA.entity instanceof House && evt.bodyB.entity instanceof Drop) {
+        this._missDrop(evt.bodyB.entity)
+        this._destroyHouse(evt.bodyA.entity)
+      } else if (evt.bodyA.entity instanceof House && evt.bodyB.entity instanceof Drop) {
+        this._missDrop(evt.bodyA.entity)
+        this._destroyHouse(evt.bodyB.entity)
       }
     })
 
@@ -58,6 +65,10 @@ export class MouseController {
       entity.missed = true
       this.app.game.incrementMissed()
     }
+  }
+
+  _destroyHouse(entity) {
+    this.app.game.remove(entity)
   }
 
   setState(state) {

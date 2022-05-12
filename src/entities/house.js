@@ -10,15 +10,13 @@ export default class House extends Entity {
     this.#init(dict.options)
   }
 
-  #init({position}) {
-    const height = 0.6
-    const width  = 0.3
-
+  #init({position, height = 0.3, width = 0.15}) {
     this.dict.body = new Body({
       mass: 25,
       position,
       fixedRotation: true,
-      fixedY: true
+      fixedY: true,
+      fixedX: true
     });
     
     this.dict.body.addShape(new Box({

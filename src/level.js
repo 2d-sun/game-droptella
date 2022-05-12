@@ -5,9 +5,6 @@ import Ground from "./entities/ground";
 import House from "./entities/house";
 
 function getRandomInt(min, max) {
-  // min = Math.ceil(min);
-  // max = Math.floor(max);
-  // return Math.floor(Math.random() * (max - min + 1)) + min;
   return Math.random() * (max - min) + min
 }
 
@@ -57,10 +54,37 @@ export default class LevelDrops {
   }
 
   _addHouses({game}) {
-    for (let i=0; i<50; i++) {
+    const width = Math.abs(this.options.xmax) + Math.abs(this.options.xmin)
+    const numberOfHouses = 50
+
+
+    let x = this.options.xmax
+    let butch = 5
+
+    let houseWidth  = width / numberOfHouses / 1.5
+    let housesSpace = houseWidth * 50
+    let spaceLeft   = width - housesSpace
+
+    for (let i=0; i<numberOfHouses; i++) {
+      //                                        //  4
+      //
+      //
+      //
+      //  7   3.5   0   3.5   7   10.5   14     //
+      //  |-------------------------------|     // -4
+      // left          center           right   //
+      //
+      // i=1, X = 14, nextX = 14 - 0.3(width) - 0.1(yard)
+      //
       const options = {
-        position: [getRandomInt(this.options.xmin, this.options.xmax), this.options.ymin]
+        position: [x, this.options.ymin + 0.15],
+        width: houseWidth
       }
+
+      const housesLeft = numberOfHouses - i
+      const yardSpace = i % butch === 0 ? spaceLeft / (housesLeft) : getRandomInt(0.01, spaceLeft / (housesLeft))
+      spaceLeft = spaceLeft - yardSpace
+      x = x + houseWidth + yardSpace
       game.add(new House({options}))
     }
   }

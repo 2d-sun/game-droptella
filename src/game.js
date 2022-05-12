@@ -146,4 +146,9 @@ export class Game {
   incrementDonates(income) {
     this.labels.donates.addAndUpdate(income)
   }
+
+  removeHouse(entity) {
+    this.remove(entity)
+    this.deadHouses.push(entity)
+  }
 }

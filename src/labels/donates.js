@@ -9,7 +9,6 @@ class Donates extends Label {
     this.text.y = 50
   }
   update(newValue) {
-    console.log("bbbb update", newValue)
     this.set(`${localization.donates}: ${newValue}`)
     return this
   }
