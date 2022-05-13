@@ -12,19 +12,22 @@ export class App {
   constructor() {
     this.width = window.innerWidth
     this.height = window.innerHeight
-    
-    this.renderer = new PIXI.Renderer({
-      // width: 1280,
-      // height: 720,
+
+    this.application = new PIXI.Application({
+      resizeTo: window,
       width: this.width,
       height: this.height,
-      //autoResize: true,
-      //resolution: devicePixelRatio
-      resolution: 1
-    });
-    this.ticker = new PIXI.Ticker();
-    this.stage = new PIXI.Container();
-    this.loader = new PIXI.Loader();
+      resolution: 1,
+      // autoResize: true,
+      // resolution: devicePixelRatio
+      // width: 1280,
+      // height: 720,
+    })
+
+    this.renderer = this.application.renderer;
+    this.ticker = this.application.ticker;
+    this.stage = this.application.stage;
+    this.loader = this.application.loader;
 
     this.ticker.add(this.render.bind(this), PIXI.UPDATE_PRIORITY.LOW);
     this.ticker.start();

@@ -21,6 +21,7 @@
 
 
 # TODO V 1.0
+0. ZOOM
 1. Add persentage to see number of destroyed houses and houses which are left
 2. Add sprites
   1. Background
@@ -37,3 +38,4 @@
 # TODO V 1.1
 1. Add the man who randlomly tries to mark some place
 2. Add weapon to deal with such kind of enemy.
+3. Probably it would be great to make drops falls not randomly over the whole area, but randomly over the area covered with houses.
