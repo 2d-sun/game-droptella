@@ -12,7 +12,7 @@ export default class LevelDrops {
   constructor(app) {
     this.app = app
     this.data = {
-      scale: 250,
+      // scale: 0,
       gravity: -5
     }
     this.bgPosition = { x: 0, y: 0 };
@@ -24,14 +24,16 @@ export default class LevelDrops {
       ymin = -4,
       ymax = 4;
     this.options = {
-      xmax, xmin, ymax, ymin
+      xmax, xmin, ymax, ymin,
+      width: app.renderer.width,
+      height: app.renderer.height,
+      scale: 100
     }
   }
 
   init(app) {
     const {world} = app.phys
     
-    //app.renderer.resize(window.innerWidth, window.innerHeight)
     app.game.pixiRoot.position.set(2048, 1024);
     world.overlapKeeper.recordPool.resize(16);
     world.narrowphase.contactEquationPool.resize(1024);
@@ -54,7 +56,7 @@ export default class LevelDrops {
   }
 
   _addHouses({game}) {
-    const width = Math.abs(this.options.xmax) + Math.abs(this.options.xmin)
+    const width = this.options.width / Math.abs(this.options.xmax) + Math.abs(this.options.xmin)
     const numberOfHouses = 50
 
 
@@ -78,7 +80,8 @@ export default class LevelDrops {
       //
       const options = {
         position: [x, this.options.ymin + 0.15],
-        width: houseWidth
+        width: houseWidth,
+        height: this.options.height / this.options.scale
       }
 
       const housesLeft = numberOfHouses - i
@@ -92,7 +95,7 @@ export default class LevelDrops {
   _addGround(app) {
     const {game} = app
 
-    const {ymin, ymax, xmin, xmax} = this.options
+    //const {ymin, ymax, xmin, xmax} = this.options
     
     // Create bottom plane
     game.add(new Ground({options: this.options}));
@@ -149,6 +152,8 @@ export default class LevelDrops {
   }
 
   _addUmrella({game}) {
-    game.add(new Umbrella({options: this.options}))
+    const umbrella = new Umbrella({options: {...this.options, scale: 100}})
+    window.umbrella = umbrella
+    game.add(umbrella)
   }
 }

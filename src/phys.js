@@ -153,7 +153,7 @@ export class Phys {
   _drawPlane(debug, shape, body) {
     debug.lineStyle(10.0, body.color || 0x808080, 1.0);
     debug.moveTo(-2220, 0);
-    debug.lineTo(this.app.width - 10, 0);
+    debug.lineTo(this.app.renderer.width - 10, 0);
   }
 
   _drawConvex(debug, shape, body) {

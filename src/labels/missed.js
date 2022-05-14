@@ -5,7 +5,8 @@ class Missed extends Label {
   constructor(customStyle) {
     super(`${localization.missed}: 0`, customStyle)
     this.missed = 0
-    this.text.y = 300
+    this.topKo = 0.07
+    this.text.y = window.innerHeight * this.topKo
   }
   update(newValue) {
     this.set(`${localization.missed}: ${newValue}`)

@@ -13,8 +13,8 @@ export default class Umbrella extends Entity {
   #init() {
     const options = this.dict.options
 
-    const height = 0.1
-    const width  = 0.3
+    const height = options.height / options.scale
+    const width  = options.width / options.scale
 
     this.dict.body = new Body({
       mass: 1000,

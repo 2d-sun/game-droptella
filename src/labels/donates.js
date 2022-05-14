@@ -6,7 +6,8 @@ class Donates extends Label {
   constructor(customStyle) {
     super(`${localization.donates}: 0`, customStyle)
     this.donate = 0
-    this.text.y = 50
+    this.topKo = 0.01
+    this.text.y = window.innerHeight * this.topKo
   }
   update(newValue) {
     this.set(`${localization.donates}: ${newValue}`)
