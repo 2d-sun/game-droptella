@@ -12,23 +12,77 @@ export default class LevelDrops {
   constructor(app) {
     this.app = app
     this.data = {
-      // scale: 0,
-      gravity: -5
+      scale: 0,
+      gravity: -20
     }
     this.bgPosition = { x: 0, y: 0 };
     this.warp = false;
 
+    this.topKo = 0.05
+
     let 
-      xmin = 7,
-      xmax = -14,
-      ymin = -4,
-      ymax = 4;
+      xmin = 68,
+      xmax = this._getXMax(),
+      ymin = this._getYMin(),
+      ymax = app.renderer.height * this.topKo;
+      
+    // let 
+    //   xmin = 7,
+    //   xmax = -14,
+    //   ymin = -4,
+    //   ymax = 4;
     this.options = {
       xmax, xmin, ymax, ymin,
       width: app.renderer.width,
       height: app.renderer.height,
       scale: 100
     }
+
+    window.levelOptions = this.options
+
+    window.addEventListener("resize", () => {
+      requestAnimationFrame(() => {
+        this.options.ymin = this._getYMin()
+      })
+    })
+  }
+
+  _getYMin() {
+
+    // phys - pixesl
+    //  30 - 100
+    //  20 - 400
+    //  10 - 700
+    //   3 - 
+    //   2 - 964
+    //   1 - 997
+    //   0 - 1000
+    // -10 - 1300
+    // -20 - 1600
+    // -40 - 2200
+    // -50 - 2500
+    // -70 - 3127
+
+    // 1 - 0.0333
+
+
+    // 1000px - means zero in phys coords
+    // 300px  - means 10 in phys coords
+
+    const tenPersentUp    = window.innerHeight * 0.1
+    const pixelsUnit      = 300
+    const physUnit        = 10
+    const pixelToPhysZero = 1000
+    // ((1000 - (window.innerHeight - (window.innerHeight * 0.1))) / 3000) * 10
+    return ((pixelToPhysZero - (window.innerHeight - tenPersentUp)) / pixelsUnit) * physUnit
+  }
+
+  _getXMax() {
+    const tenPersentUp    = window.innerHeight * 0.1
+    const pixelsUnit      = 300
+    const physUnit        = 10
+    const pixelToPhysZero = 1000
+    return ((pixelToPhysZero - (window.innerHeight - tenPersentUp)) / pixelsUnit) * physUnit
   }
 
   init(app) {
@@ -131,7 +185,7 @@ export default class LevelDrops {
     // game.add({ body: planeRight });
   }
 
-  async _addDrop({ game }, options = {position: [0,2], mass: 1, radius: 0.05}) {
+  async _addDrop({ game }, options = {}) {
     function getRandomIntWithStep(min, max, step) {
       let num = Math.floor(Math.random()*(max/step));
       return num * step + min;
@@ -140,7 +194,7 @@ export default class LevelDrops {
     for(;;) {
       let spawnMs = Math.random() < 0.2 ? 500 : 1000
       let destroyMs = Math.random() <= 0.1 ? getRandomIntWithStep(500, 1000, 100) : getRandomIntWithStep(1500, 6000, 1000)
-      options.position = [getRandomInt(this.options.xmin, this.options.xmax), getRandomInt(2, 6)]
+      options.position = [getRandomInt(this.options.xmin, this.options.xmax), getRandomInt(this.options.ymax - (this.options.ymax * 0.1), this.options.ymax)]
       options.destroyMs = destroyMs
       await new Promise(resolve => setTimeout(resolve, spawnMs));
       const drop = new Drop({options})

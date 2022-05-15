@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import Level from "./level";
 import { Entity } from "./entities/entity";
+import Label from "./labels/label"
 import donates from "./labels/donates"
 import missed from "./labels/missed"
 import catched from "./labels/catched"
@@ -24,6 +25,22 @@ const style = new PIXI.TextStyle({
   //wordWrapWidth: 440
 });
 
+
+class MeasureY extends Label {
+  constructor(y) {
+    super(y)
+    this.text.y = y
+  }
+}
+
+class MeasureX extends Label {
+  constructor(x) {
+    super(x)
+    this.text.y = 0
+    this.text.x = x
+  }
+}
+
 export class Game {
   constructor(app) {
     this.app = app;
@@ -41,7 +58,12 @@ export class Game {
     this.labels = {
       donates,
       missed,
-      catched
+      catched,
+    }
+
+    for (let i=0; i<=2500; i+=100) {
+      this.labels[`labelY${i}`] = new MeasureY(i)
+      this.labels[`labelX${i}`] = new MeasureX(i)
     }
 
     this.started = false;

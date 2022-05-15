@@ -19,6 +19,8 @@ export class App {
       // height: 720,
     })
 
+    window.app = this
+
     this.renderer = this.application.renderer;
     this.ticker = this.application.ticker;
     this.stage = this.application.stage;

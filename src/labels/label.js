@@ -49,6 +49,9 @@ export default class Label {
       requestAnimationFrame(() => {
         this.setStyle({fontSize: window.innerWidth * 0.01})
         this.setY(window.innerHeight * this.topKo)
+        if (this.yes) {
+          console.log(this.text.y)
+        }
       })
     })
   }
