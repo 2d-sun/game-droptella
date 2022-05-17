@@ -11,23 +11,22 @@ export default class Drop extends Entity {
     this.#init(dict.options)
   }
 
-  #init({radius = 0.0002, mass = 1500, position = [0,0], destroyMs}) {
+  #init({radius = 0.0002, mass = 10, position = [0,0], destroyMs}) {
     this.dict.body = new Body({
       mass,
       position,
-      // velocity: mass
-      //damping: 0
+      gravityScale: 2
     });
-    console.log("bbbbbbb mass", mass)
     this.dict.body.addShape(new Circle({ 
-      radius: window.innerWidth * radius,
+      radius
+      //radius: window.innerWidth * radius,
       //collisionGroup: GROUPS.DROP,
       //collisionMask: GROUPS.GROUND | GROUPS.UMBRELLA | GROUPS.DROP
     }));
 
     this.dict.body.allowSleep = true;
-    //this.dict.body.sleepSpeedLimit = 1; // Body will feel sleepy if speed<1 (speed is the norm of velocity)
-    //this.dict.body.sleepTimeLimit =  1; 
+    this.dict.body.sleepSpeedLimit = 1; // Body will feel sleepy if speed<1 (speed is the norm of velocity)
+    this.dict.body.sleepTimeLimit =  1;
 
     this.dict.body.destroyMs = destroyMs
 

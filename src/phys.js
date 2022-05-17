@@ -111,8 +111,8 @@ export class Phys {
       shapes.forEach(shape => this._drawDrop(debug, shape, body))
     } else if (groupType === GROUPS.UMBRELLA) {
       shapes.forEach(shape => this._drawConvex(debug, shape, body))
-    } else if (groupType === GROUPS.GROUND) {
-      shapes.forEach(shape => this._drawPlane(debug, shape, body))
+    // } else if (groupType === GROUPS.GROUND) {
+    //   shapes.forEach(shape => this._drawPlane(debug, shape, body))
     } else {
       for (let i = 0; i < shapes.length; i++) {
         const shape = shapes[i];
@@ -132,14 +132,14 @@ export class Phys {
 
   _drawDrop(debug, shape, body) {
     this._drawCircle(debug, shape)
-    setTimeout(() => {
-      drawStar(0, 0, 12, 30, 10, debug)
-    }, body.destroyMs - 1)
+    // setTimeout(() => {
+    //   this.drawStar(debug)
+    // }, body.destroyMs - (body.destroyMs * 0.01))
   }
 
   _drawCircle(debug, shape) {
     const color = 0.774280154389259 * 0xffffff // almost red
-    debug.lineStyle(3.0, color, 1.0);
+    debug.lineStyle(3.0, color);
     //debug.beginFill(color, 1.0);
     debug.drawCircle(
       -shape.position[0] * this.METER_TO_PIXEL,
@@ -150,6 +150,7 @@ export class Phys {
     debug.lineStyle(0.0);
   }
 
+  // works bad ... replace with box
   _drawPlane(debug, shape, body) {
     debug.lineStyle(10.0, body.color || 0x808080, 1.0);
     debug.moveTo(-2220, 0);
@@ -197,6 +198,10 @@ export class Phys {
     }
 
     debug.lineStyle(0.0);
+  }
+
+  drawStar(debug) {
+    drawStar(0, 0, 12, 30, 10, debug)
   }
 }
 

@@ -56,6 +56,7 @@ export class MouseController {
   }
 
   _catchDrop(entity) {
+    this.umbrella.velocity = [0, 0]
     this.app.game.incrementCatched()
     this.app.game.remove(entity)
   }
@@ -63,6 +64,11 @@ export class MouseController {
   _missDrop(entity) {
     if (!entity.missed) {
       entity.missed = true
+      setTimeout(() => {
+        this.app.game.remove(entity)
+      }, 0)
+      entity.body.shapes[0].radius *= 2
+      this.app.phys.drawStar(entity.pixiDebug)
       this.app.game.incrementMissed()
     }
   }
@@ -93,6 +99,7 @@ export class MouseController {
     // this.mouseConstraint.bodyA.wakeUp();
     // this.mouseConstraint.bodyB.wakeUp()
     this.umbrella.position[0] = physicsPosition[0]
+    this.umbrella.velocity = [0, 0]
     //this.umbrella.velocity[0] = Math.ceil(physicsPosition[0] - this.umbrella.position[0]) * 3
   }
 }

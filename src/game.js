@@ -61,10 +61,10 @@ export class Game {
       catched,
     }
 
-    for (let i=0; i<=2500; i+=100) {
-      this.labels[`labelY${i}`] = new MeasureY(i)
-      this.labels[`labelX${i}`] = new MeasureX(i)
-    }
+    //for (let i=0; i<=2500; i+=100) {
+      //this.labels[`labelY${i}`] = new MeasureY(i)
+      //this.labels[`labelX${i}`] = new MeasureX(i)
+    //}
 
     this.started = false;
 

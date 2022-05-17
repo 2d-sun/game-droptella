@@ -21,10 +21,13 @@ export default class LevelDrops {
     this.topKo = 0.05
 
     let 
-      xmin = 68,
+      xmin = this._getXMin(),
       xmax = this._getXMax(),
       ymin = this._getYMin(),
-      ymax = app.renderer.height * this.topKo;
+      ymax = this._getYMax();
+    
+    const numberOfHouses = 50
+    const spaceForHouses = Math.abs(xmin) + Math.abs(xmax)
       
     // let 
     //   xmin = 7,
@@ -35,7 +38,10 @@ export default class LevelDrops {
       xmax, xmin, ymax, ymin,
       width: app.renderer.width,
       height: app.renderer.height,
-      scale: 100
+      scale: 700,
+      spaceForHouses,
+      houseWidth: spaceForHouses / numberOfHouses / 1.5,
+      numberOfHouses
     }
 
     window.levelOptions = this.options
@@ -73,16 +79,33 @@ export default class LevelDrops {
     const pixelsUnit      = 300
     const physUnit        = 10
     const pixelToPhysZero = 1000
-    // ((1000 - (window.innerHeight - (window.innerHeight * 0.1))) / 3000) * 10
+    // ((1000 - (window.innerHeight - (window.innerHeight * 0.1))) / 300) * 10
     return ((pixelToPhysZero - (window.innerHeight - tenPersentUp)) / pixelsUnit) * physUnit
   }
 
-  _getXMax() {
+  _getYMax() {
     const tenPersentUp    = window.innerHeight * 0.1
     const pixelsUnit      = 300
     const physUnit        = 10
     const pixelToPhysZero = 1000
-    return ((pixelToPhysZero - (window.innerHeight - tenPersentUp)) / pixelsUnit) * physUnit
+    return ((pixelToPhysZero - tenPersentUp) / pixelsUnit) * physUnit
+  }
+
+  _getXMax() {
+    const fivePersentUp    = window.innerWidth * 0.05
+    const pixelsUnit      = 300
+    const physUnit        = 10
+    const pixelToPhysZero = 2000
+    // ((2000 - (window.innerWidth - (window.innerWidth * 0.1))) / 300) * 10
+    return ((pixelToPhysZero - (window.innerWidth - fivePersentUp)) / pixelsUnit) * physUnit
+  }
+
+  _getXMin() {
+    const fivePersentUp    = window.innerWidth * 0.05
+    const pixelToPhysZero = 2000
+    const physUnit        = 10
+    const pixelsUnit      = 300
+    return ((pixelToPhysZero - fivePersentUp) / pixelsUnit) * physUnit
   }
 
   init(app) {
@@ -110,16 +133,15 @@ export default class LevelDrops {
   }
 
   _addHouses({game}) {
-    const width = this.options.width / Math.abs(this.options.xmax) + Math.abs(this.options.xmin)
-    const numberOfHouses = 50
+    const { spaceForHouses, numberOfHouses }= this.options
 
 
     let x = this.options.xmax
     let butch = 5
 
-    let houseWidth  = width / numberOfHouses / 1.5
+    let houseWidth  = spaceForHouses / numberOfHouses / 1.5
     let housesSpace = houseWidth * 50
-    let spaceLeft   = width - housesSpace
+    let spaceLeft   = spaceForHouses - housesSpace
 
     for (let i=0; i<numberOfHouses; i++) {
       //                                        //  4
@@ -135,7 +157,7 @@ export default class LevelDrops {
       const options = {
         position: [x, this.options.ymin + 0.15],
         width: houseWidth,
-        height: this.options.height / this.options.scale
+        height: this._getHouseHeight()
       }
 
       const housesLeft = numberOfHouses - i
@@ -152,7 +174,12 @@ export default class LevelDrops {
     //const {ymin, ymax, xmin, xmax} = this.options
     
     // Create bottom plane
-    game.add(new Ground({options: this.options}));
+    game.add(new Ground({options: {
+      ...this.options,
+      // position: [this.options.xmin, this.options.ymin + 0.15],
+      width: app.renderer.width,
+      height: 2,
+    }}));
     
 
     // Create top plane
@@ -191,23 +218,32 @@ export default class LevelDrops {
       return num * step + min;
     }
 
+    options.radius = this.options.houseWidth / 3
+
+    const dropY = this.options.ymin * 5
+
     for(;;) {
       let spawnMs = Math.random() < 0.2 ? 500 : 1000
-      let destroyMs = Math.random() <= 0.1 ? getRandomIntWithStep(500, 1000, 100) : getRandomIntWithStep(1500, 6000, 1000)
-      options.position = [getRandomInt(this.options.xmin, this.options.xmax), getRandomInt(this.options.ymax - (this.options.ymax * 0.1), this.options.ymax)]
-      options.destroyMs = destroyMs
+      options.destroyMs = Math.random() <= 0.1 ? getRandomIntWithStep(1000, 1500, 100) : getRandomIntWithStep(1500, 6000, 1000)
+      options.position = [getRandomInt(this.options.xmin, this.options.xmax), getRandomInt(dropY - (dropY * 0.1), dropY - (dropY * 0.2))]
       await new Promise(resolve => setTimeout(resolve, spawnMs));
       const drop = new Drop({options})
       game.add(drop);
-      setTimeout(() => {
-        game.remove(drop)
-      }, options.destroyMs)
+      // drop.body.destroyTimeout = setTimeout(() => {
+      //   game.remove(drop)
+      // }, options.destroyMs)
     }
   }
 
   _addUmrella({game}) {
-    const umbrella = new Umbrella({options: {...this.options, scale: 100}})
-    window.umbrella = umbrella
+    const umbrella = new Umbrella({options: {
+      ...this.options,
+      houseHeight: this._getHouseHeight()
+    }})
     game.add(umbrella)
+  }
+
+  _getHouseHeight() {
+    return this.options.height / this.options.scale
   }
 }
