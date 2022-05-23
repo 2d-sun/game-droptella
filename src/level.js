@@ -133,13 +133,19 @@ export default class LevelDrops {
   }
 
   _addHouses({game}) {
-    const { spaceForHouses, numberOfHouses }= this.options
+    const { spaceForHouses }= this.options
 
 
     let x = this.options.xmax
     let butch = 5
 
-    let houseWidth  = spaceForHouses / numberOfHouses / 1.5
+    //let houseWidth  = spaceForHouses / numberOfHouses / 1.5
+    let houseWidth = (window.innerWidth/10000)*4
+    let numberOfHouses = window.innerWidth / houseWidth
+
+    if (numberOfHouses > 50) numberOfHouses = 50
+
+
     let housesSpace = houseWidth * 50
     let spaceLeft   = spaceForHouses - housesSpace
 
@@ -154,10 +160,11 @@ export default class LevelDrops {
       //
       // i=1, X = 14, nextX = 14 - 0.3(width) - 0.1(yard)
       //
+      const height = this._getHouseHeight()
       const options = {
-        position: [x, this.options.ymin + 0.15],
+        position: [x, this.options.ymin - height*0.5],
         width: houseWidth,
-        height: this._getHouseHeight()
+        height
       }
 
       const housesLeft = numberOfHouses - i
@@ -218,14 +225,13 @@ export default class LevelDrops {
       return num * step + min;
     }
 
-    options.radius = this.options.houseWidth / 3
-
-    const dropY = this.options.ymin * 5
+    // options.radius = (this.options.houseWidth)/window.devicePixelRatio
+    options.radius = (window.innerWidth/10000)*1.5
 
     for(;;) {
       let spawnMs = Math.random() < 0.2 ? 500 : 1000
       options.destroyMs = Math.random() <= 0.1 ? getRandomIntWithStep(1000, 1500, 100) : getRandomIntWithStep(1500, 6000, 1000)
-      options.position = [getRandomInt(this.options.xmin, this.options.xmax), getRandomInt(dropY - (dropY * 0.1), dropY - (dropY * 0.2))]
+      options.position = [getRandomInt(this.options.xmin, this.options.xmax), this.options.ymax]
       await new Promise(resolve => setTimeout(resolve, spawnMs));
       const drop = new Drop({options})
       game.add(drop);
@@ -244,6 +250,8 @@ export default class LevelDrops {
   }
 
   _getHouseHeight() {
-    return this.options.height / this.options.scale
+    const max = this.options.height/ this.options.scale
+    const min = this.options.height/2/ this.options.scale
+    return getRandomInt(min, max)
   }
 }

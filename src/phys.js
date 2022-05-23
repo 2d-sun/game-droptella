@@ -139,7 +139,7 @@ export class Phys {
 
   _drawCircle(debug, shape) {
     const color = 0.774280154389259 * 0xffffff // almost red
-    debug.lineStyle(3.0, color);
+    debug.lineStyle(5/window.devicePixelRatio, color);
     //debug.beginFill(color, 1.0);
     debug.drawCircle(
       -shape.position[0] * this.METER_TO_PIXEL,
