@@ -13,7 +13,7 @@ export default class LevelDrops {
     this.app = app
     this.data = {
       scale: 0,
-      gravity: -20
+      gravity: -(window.innerHeight * 0.02435)
     }
     this.bgPosition = { x: 0, y: 0 };
     this.warp = false;
@@ -26,7 +26,7 @@ export default class LevelDrops {
       ymin = this._getYMin(),
       ymax = this._getYMax();
     
-    const numberOfHouses = 50
+    const numberOfHouses = 20
     const spaceForHouses = Math.abs(xmin) + Math.abs(xmax)
       
     // let 
@@ -38,9 +38,9 @@ export default class LevelDrops {
       xmax, xmin, ymax, ymin,
       width: app.renderer.width,
       height: app.renderer.height,
-      scale: 700,
+      scale: 350,
       spaceForHouses,
-      houseWidth: spaceForHouses / numberOfHouses / 1.5,
+      houseWidth: spaceForHouses / numberOfHouses,
       numberOfHouses
     }
 
@@ -54,6 +54,25 @@ export default class LevelDrops {
   }
 
   _getYMin() {
+
+    const tenPersentUp    = window.innerHeight * 0.9
+    const pixelsUnit      = 300
+    const physUnit        = 10
+    const pixelToPhysZero = 1000
+    // ((1000 - (window.innerHeight - (window.innerHeight * 0.1))) / 300) * 10
+    console.log("bbbbb y", window.innerHeight, ((pixelToPhysZero - window.innerHeight) / pixelsUnit * physUnit) + 1)
+    return ((pixelToPhysZero - window.innerHeight) / pixelsUnit * physUnit) + 1
+    return (pixelToPhysZero - tenPersentUp) / pixelsUnit * physUnit
+    return (pixelToPhysZero - window.innerHeight)/33
+  }
+
+  _getYMax() {
+
+
+    // phys - pixesl
+    // -58  - 3184
+    // 0    - x
+    // 8.67 - 796
 
     // phys - pixesl
     //  30 - 100
@@ -71,19 +90,9 @@ export default class LevelDrops {
 
     // 1 - 0.0333
 
-
     // 1000px - means zero in phys coords
     // 300px  - means 10 in phys coords
 
-    const tenPersentUp    = window.innerHeight * 0.1
-    const pixelsUnit      = 300
-    const physUnit        = 10
-    const pixelToPhysZero = 1000
-    // ((1000 - (window.innerHeight - (window.innerHeight * 0.1))) / 300) * 10
-    return ((pixelToPhysZero - (window.innerHeight - tenPersentUp)) / pixelsUnit) * physUnit
-  }
-
-  _getYMax() {
     const tenPersentUp    = window.innerHeight * 0.1
     const pixelsUnit      = 300
     const physUnit        = 10
@@ -140,11 +149,12 @@ export default class LevelDrops {
     let butch = 5
 
     //let houseWidth  = spaceForHouses / numberOfHouses / 1.5
-    let houseWidth = (window.innerWidth/10000)*4
+    let houseWidth = (window.innerWidth/3000)*4
     let numberOfHouses = window.innerWidth / houseWidth
 
     if (numberOfHouses > 50) numberOfHouses = 50
 
+    numberOfHouses = 10
 
     let housesSpace = houseWidth * 50
     let spaceLeft   = spaceForHouses - housesSpace
@@ -160,9 +170,16 @@ export default class LevelDrops {
       //
       // i=1, X = 14, nextX = 14 - 0.3(width) - 0.1(yard)
       //
+
+      //    8 
+      //    0
+      //    -57
+      // 
+      //
       const height = this._getHouseHeight()
       const options = {
-        position: [x, this.options.ymin - height*0.5],
+        mass: 5000,
+        position: [x, this.options.ymin + height ],
         width: houseWidth,
         height
       }
@@ -170,7 +187,7 @@ export default class LevelDrops {
       const housesLeft = numberOfHouses - i
       const yardSpace = i % butch === 0 ? spaceLeft / (housesLeft) : getRandomInt(0.01, spaceLeft / (housesLeft))
       spaceLeft = spaceLeft - yardSpace
-      x = x + houseWidth + yardSpace
+      x = x + houseWidth + yardSpace + 20
       game.add(new House({options}))
     }
   }
@@ -179,13 +196,20 @@ export default class LevelDrops {
     const {game} = app
 
     //const {ymin, ymax, xmin, xmax} = this.options
+
+    const width  = app.renderer.width
+    let height = (app.renderer.height/1000) * 2
+
+    if (height < 1) height = 1
+    
+    console.log("bbbb heihg grind", height)
     
     // Create bottom plane
     game.add(new Ground({options: {
       ...this.options,
       // position: [this.options.xmin, this.options.ymin + 0.15],
-      width: app.renderer.width,
-      height: 2,
+      width,
+      height
     }}));
     
 
@@ -244,14 +268,18 @@ export default class LevelDrops {
   _addUmrella({game}) {
     const umbrella = new Umbrella({options: {
       ...this.options,
-      houseHeight: this._getHouseHeight()
+      houseHeight: this._getMaxHouseHeight()
     }})
     game.add(umbrella)
   }
 
+  _getMaxHouseHeight() {
+    return this.options.height/this.options.scale
+  }
+
   _getHouseHeight() {
-    const max = this.options.height/ this.options.scale
-    const min = this.options.height/2/ this.options.scale
+    const max = this._getMaxHouseHeight()
+    const min = this.options.height/2/this.options.scale
     return getRandomInt(min, max)
   }
 }

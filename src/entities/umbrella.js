@@ -22,7 +22,7 @@ export default class Umbrella extends Entity {
 
     this.dict.body = new Body({
       mass: 9999,
-      position: [options.xmax/2, options.ymin + height + options.houseHeight],
+      position: [options.xmax/2, options.ymin + height + options.houseHeight + options.houseHeight/2],
       fixedRotation: true,
       fixedY: true,
       velocity: [0, 0],

@@ -13,7 +13,7 @@ export default class Ground extends Entity {
 
   #init({ymin, width, height}) {
     const plane = this.addBody({
-      position: [0, ymin - height],
+      position: [0, ymin],
       mass: 1000,
       fixedRotation: true,
       fixedY: true,

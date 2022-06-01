@@ -2,6 +2,10 @@ import * as PIXI from "pixi.js";
 import { Circle, Convex, Plane, World } from "p2";
 import GROUPS from "./entities/groups"
 
+function getRandomInt(min, max) {
+  return Math.round(Math.random() * (max - min) + min)
+}
+
 export class Phys {
   constructor(app) {
     this.app = app;
@@ -113,6 +117,8 @@ export class Phys {
       shapes.forEach(shape => this._drawConvex(debug, shape, body))
     // } else if (groupType === GROUPS.GROUND) {
     //   shapes.forEach(shape => this._drawPlane(debug, shape, body))
+    } else if (groupType === GROUPS.HOUSE) {
+      return this._drawHouse(shapes[0])
     } else {
       for (let i = 0; i < shapes.length; i++) {
         const shape = shapes[i];
@@ -128,6 +134,21 @@ export class Phys {
     debug.body = this;
     debug.visible = false
     return debug;
+  }
+
+  _drawHouse(shape) {
+    const houseIndex = getRandomInt(0, 4)
+
+    const tex = this.app.game.textures.buildingsTextures[houseIndex]
+    const house = new PIXI.Sprite(tex);
+    house.anchor.set(0.5);
+    house.x = -shape.position[0] * this.METER_TO_PIXEL
+    house.y = -shape.position[1] * this.METER_TO_PIXEL
+    house.width = shape.width * this.METER_TO_PIXEL
+    house.height = shape.height * this.METER_TO_PIXEL
+    house.body = this;
+    house.visible = false
+    return house
   }
 
   _drawDrop(debug, shape, body) {

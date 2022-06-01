@@ -16,7 +16,8 @@ export default class House extends Entity {
       position,
       fixedRotation: true,
       // fixedY: true,
-      fixedX: true
+      fixedX: true,
+      //gravityScale: 0,
     });
     
     this.dict.body.addShape(new Box({

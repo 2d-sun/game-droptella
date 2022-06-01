@@ -25,7 +25,6 @@ const style = new PIXI.TextStyle({
   //wordWrapWidth: 440
 });
 
-
 class MeasureY extends Label {
   constructor(y) {
     super(y)
@@ -48,6 +47,8 @@ export class Game {
     this.deadHouses = []
     this.houses = []
 
+    this.textures = {}
+
     this.entities = {
       [GROUPS.DROP]: [],
       [GROUPS.UMBRELLA]: [],
@@ -61,10 +62,10 @@ export class Game {
       catched,
     }
 
-    //for (let i=0; i<=2500; i+=100) {
-      //this.labels[`labelY${i}`] = new MeasureY(i)
-      //this.labels[`labelX${i}`] = new MeasureX(i)
-    //}
+    // for (let i=0; i<=4000; i+=50) {
+    //   this.labels[`labelY${i}`] = new MeasureY(i)
+    //   this.labels[`labelX${i}`] = new MeasureX(i)
+    // }
 
     this.started = false;
 
@@ -138,11 +139,30 @@ export class Game {
         "https://pixijs.io/examples/examples/assets/bunny.png",
         options
       )
+      .add("buildings", "./static/assets/sheet/buildings.png")
       .add("my-map", "my-map.json", options);
+    // const spritesheetPath = new URL("static/assets/sheet", window.location.origin).href
+    // const buildingsTexture  = new URL(`${spritesheetPath}/buildings.png`, window.location.origin).href
+    // const buildingsData   = new URL(`${spritesheetPath}/spritesheet.json`, window.location.origin).href
 
-    app.loader.load(() => {
+    // app.loader.shared.add(
+    //   new URL(`${spritesheetPath}/spritesheet.png`, window.location.origin).href,
+    //   options
+    // ).load(() => {
+    //   const spritesheet = new URL(`${spritesheetPath}/spritesheet.json`, window.location.origin).href
+    //   let sheet = PIXI.Loader.shared.resources[spritesheet].spritesheet;
+    //   let sprite = new PIXI.Sprite(sheet.textures["buildings.png"]);
+    // })
+
+    // const sheet = new PIXI.Spritesheet(buildingsTexture, buildingsData);
+    // sheet.parse(() => console.log('Spritesheet ready to use!'));
+    // console.log("bbb", sheet)
+    
+
+    app.loader.load(() => {      
       setTimeout(async () => {
         this.app.preloader.hide();
+        this.loadTextures()
         this.app.runners.initLevel.run(this.level);
         this.level.init(this.app);
         this.app.mouse.init()
@@ -157,6 +177,20 @@ export class Game {
         this.incrementDonates(this.houses.length - this.deadHouses.length)
       }, 1000)
     });
+  }
+
+  loadTextures() {
+    const buildingsSheet = new PIXI.BaseTexture.from(app.loader.resources["buildings"].url)
+
+    this.textures.buildingsTextures = {
+      waterTower: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(60, 200, 69, 120)),
+      hospital: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(125, 191, 125, 133)),
+      bank: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(250, 260, 70, 60)),
+      0: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(338, 212, 75, 100)),
+      1: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(427, 212, 80, 100)),
+      2: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(517, 212, 60, 95)),
+      3: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(582, 212, 60, 95)),
+    }
   }
 
   incrementCatched() {

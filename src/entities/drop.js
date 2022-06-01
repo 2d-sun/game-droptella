@@ -15,7 +15,7 @@ export default class Drop extends Entity {
     this.dict.body = new Body({
       mass,
       position,
-      gravityScale: 2
+      //gravityScale: 2
     });
     this.dict.body.addShape(new Circle({ 
       radius
