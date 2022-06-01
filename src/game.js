@@ -4,6 +4,7 @@ import { Entity } from "./entities/entity";
 import Label from "./labels/label"
 import donates from "./labels/donates"
 import missed from "./labels/missed"
+import housesPersentage from "./labels/housesPersentage"
 import catched from "./labels/catched"
 import GROUPS from "./entities/groups"
 
@@ -60,6 +61,7 @@ export class Game {
       donates,
       missed,
       catched,
+      housesPersentage
     }
 
     // for (let i=0; i<=4000; i+=50) {
@@ -175,6 +177,7 @@ export class Game {
       setInterval(() => {
         // one house produces 1$ per second
         this.incrementDonates(this.houses.length - this.deadHouses.length)
+        this.updateHousesPersentage(this.houses.length)
       }, 1000)
     });
   }
@@ -201,6 +204,10 @@ export class Game {
   }
   incrementDonates(income) {
     this.labels.donates.addAndUpdate(income)
+  }
+  updateHousesPersentage(houses) {
+    // this.labels.housesPersentage.update(`${houses}/${this.level.initialHousesNumber}`)
+    this.labels.housesPersentage.update(Math.floor(100 * houses / this.level.initialHousesNumber))
   }
 
   removeHouse(entity) {

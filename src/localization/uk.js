@@ -1,5 +1,6 @@
 export default {
   donates: "$",
   catched: "СПІЙМАНО",
-  missed: "ПРОПУЩЕНО"
+  missed: "ПРОПУЩЕНО",
+  housesPersentage: "ЦІЛІСНІСТЬ"
 }

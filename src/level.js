@@ -39,6 +39,8 @@ export default class LevelDrops {
 
     window.levelOptions = this.options
 
+    this.initialHousesNumber = 0
+
     window.addEventListener("resize", () => {
       requestAnimationFrame(() => {
         this.options.ymin = this._getYMin()
@@ -53,7 +55,6 @@ export default class LevelDrops {
     const physUnit        = 10
     const pixelToPhysZero = 1000
     // ((1000 - (window.innerHeight - (window.innerHeight * 0.1))) / 300) * 10
-    console.log("bbbbb y", window.innerHeight, ((pixelToPhysZero - window.innerHeight) / pixelsUnit * physUnit) + 1)
     return ((pixelToPhysZero - window.innerHeight) / pixelsUnit * physUnit) + 1
     return (pixelToPhysZero - tenPersentUp) / pixelsUnit * physUnit
     return (pixelToPhysZero - window.innerHeight)/33
@@ -139,10 +140,9 @@ export default class LevelDrops {
     let butch = 5
 
     let houseWidth = window.innerWidth/1000
-
-    let actualHouseNumber = 0
+    
     while (x <= this.options.xmin) {
-      let yardSpace = actualHouseNumber % butch === 0 ? getRandomInt(0.01, 0.05) : 0.1 
+      let yardSpace = this.initialHousesNumber % butch === 0 ? getRandomInt(0.01, 0.05) : 0.1 
       
       const height = this._getHouseHeight()
       const options = {
@@ -154,7 +154,7 @@ export default class LevelDrops {
 
       x += houseWidth + yardSpace
       game.add(new House({options}))
-      actualHouseNumber++
+      this.initialHousesNumber++
     }
   }
 

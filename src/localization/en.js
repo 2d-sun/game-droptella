@@ -1,5 +1,6 @@
 export default {
   "donates": "$",
   "catched": "CATCHED",
-  "missed": "MISSED"
+  "missed": "MISSED",
+  "housesPersentage": "HEALTH"
 }
