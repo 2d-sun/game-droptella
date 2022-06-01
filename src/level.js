@@ -25,10 +25,6 @@ export default class LevelDrops {
       xmax = this._getXMax(),
       ymin = this._getYMin(),
       ymax = this._getYMax();
-    
-    const numberOfHouses = 20
-    const spaceForHouses = Math.abs(xmin) + Math.abs(xmax)
-      
     // let 
     //   xmin = 7,
     //   xmax = -14,
@@ -38,10 +34,7 @@ export default class LevelDrops {
       xmax, xmin, ymax, ymin,
       width: app.renderer.width,
       height: app.renderer.height,
-      scale: 350,
-      spaceForHouses,
-      houseWidth: spaceForHouses / numberOfHouses,
-      numberOfHouses
+      scale: 350
     }
 
     window.levelOptions = this.options
@@ -142,53 +135,26 @@ export default class LevelDrops {
   }
 
   _addHouses({game}) {
-    const { spaceForHouses }= this.options
-
-
     let x = this.options.xmax
     let butch = 5
 
-    //let houseWidth  = spaceForHouses / numberOfHouses / 1.5
-    let houseWidth = (window.innerWidth/3000)*4
-    let numberOfHouses = window.innerWidth / houseWidth
+    let houseWidth = window.innerWidth/1000
 
-    if (numberOfHouses > 50) numberOfHouses = 50
-
-    numberOfHouses = 10
-
-    let housesSpace = houseWidth * 50
-    let spaceLeft   = spaceForHouses - housesSpace
-
-    for (let i=0; i<numberOfHouses; i++) {
-      //                                        //  4
-      //
-      //
-      //
-      //  7   3.5   0   3.5   7   10.5   14     //
-      //  |-------------------------------|     // -4
-      // left          center           right   //
-      //
-      // i=1, X = 14, nextX = 14 - 0.3(width) - 0.1(yard)
-      //
-
-      //    8 
-      //    0
-      //    -57
-      // 
-      //
+    let actualHouseNumber = 0
+    while (x <= this.options.xmin) {
+      let yardSpace = actualHouseNumber % butch === 0 ? getRandomInt(0.01, 0.05) : 0.1 
+      
       const height = this._getHouseHeight()
       const options = {
         mass: 5000,
-        position: [x, this.options.ymin + height ],
+        position: [x, this.options.ymin + height],
         width: houseWidth,
         height
       }
 
-      const housesLeft = numberOfHouses - i
-      const yardSpace = i % butch === 0 ? spaceLeft / (housesLeft) : getRandomInt(0.01, spaceLeft / (housesLeft))
-      spaceLeft = spaceLeft - yardSpace
-      x = x + houseWidth + yardSpace + 20
+      x += houseWidth + yardSpace
       game.add(new House({options}))
+      actualHouseNumber++
     }
   }
 
