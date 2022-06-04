@@ -133,10 +133,10 @@ export default class LevelDrops {
 
     this._addGround(app)
 
-    this._addHouses(app)
+    this.addHouses(app)
   }
 
-  _addHouses({game}) {
+  addHouses({game}) {
     let x = this.options.xmax
     let butch = 5
 
@@ -168,8 +168,6 @@ export default class LevelDrops {
     let height = (app.renderer.height/1000) * 2
 
     if (height < 1) height = 1
-    
-    console.log("bbbb heihg grind", height)
     
     // Create bottom plane
     game.add(new Ground({options: {

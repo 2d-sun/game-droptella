@@ -35,7 +35,8 @@
   1. Make it wider
 4. Add limit of drops(reaching the limit of drops means the level is passed).
 5. If the pesentage of destroyed houses is to big it means player has lost the city.
-  1. Move to next level without improvement
+  1. (done) Stop game, show FAILED label
+  2. Move to next level without improvement
 6. Add Reward after 10 saved cities. Video with dead enemy
 
 

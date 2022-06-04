@@ -4,4 +4,5 @@ export default {
   "missed": "MISSED",
   "housesPersentage": "HEALTH",
   "failed": "FAILED",
+  "start": "LETS PROTECT"
 }

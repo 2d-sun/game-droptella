@@ -9,6 +9,10 @@ class Failed extends Label {
     this.text.y = window.innerHeight/2 - 50
     this.text.x = window.innerWidth/2 - 50
   }
+
+  changeTo(label) {
+    this.text.text = localization[label]
+  }
 }
 
 

@@ -5,7 +5,7 @@ import Label from "./labels/label"
 import donates from "./labels/donates"
 import missed from "./labels/missed"
 import housesPersentage from "./labels/housesPersentage"
-import failed from "./labels/failed"
+import notification from "./labels/notification"
 import catched from "./labels/catched"
 import GROUPS from "./entities/groups"
 
@@ -42,6 +42,8 @@ class MeasureX extends Label {
   }
 }
 
+const FAILED_HOUSE_HUMBER_CONDITION = 3
+
 export class Game {
   constructor(app) {
     this.app = app;
@@ -50,6 +52,8 @@ export class Game {
     this.houses = []
 
     this.textures = {}
+
+    this.cities = new Array(10)
 
     this.entities = {
       [GROUPS.DROP]: [],
@@ -66,7 +70,7 @@ export class Game {
     }
 
     this.tempLabels = {
-      failed
+      notification
     }
 
     this.intervals = {
@@ -222,12 +226,27 @@ export class Game {
 
   checkEndLevelCondition() {
     if (
-      (this.level.initialHousesNumber > 3 &&  this.houses.length <= 3) ||
-      (this.level.initialHousesNumber <= 3 && this.houses.length <= 0)
+      (this.level.initialHousesNumber > FAILED_HOUSE_HUMBER_CONDITION &&  this.houses.length <= FAILED_HOUSE_HUMBER_CONDITION) ||
+      (this.level.initialHousesNumber <= FAILED_HOUSE_HUMBER_CONDITION && this.houses.length <= 0)
     ) {
       clearInterval(this.intervals.donatesHouses)
       this.level.stopGenerateDrops()
-      this.app.stage.addChild(this.tempLabels.failed.text)
+      this.app.stage.addChild(this.tempLabels.notification.text)
+      this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
+      this.entities[GROUPS.DROP].forEach(this.app.game.remove)
+      setTimeout(() => {
+        this.nextStage()
+      }, 5000)
     }
+  }
+
+  nextStage() {
+    this.level.addHouses(this.app)
+    this.tempLabels.notification.changeTo("start")
+    setTimeout(() => {
+      this.app.stage.removeChild(this.tempLabels.notification.text)
+      this.tempLabels.notification.changeTo("failed")
+      this.level.startGenerateDrops()
+    }, 1000)
   }
 }

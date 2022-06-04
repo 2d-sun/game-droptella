@@ -3,5 +3,6 @@ export default {
   catched: "СПІЙМАНО",
   missed: "ПРОПУЩЕНО",
   housesPersentage: "ЦІЛІСНІСТЬ",
-  failed: "=("
+  failed: "=(",
+  start: "ДО БОЮ"
 }
