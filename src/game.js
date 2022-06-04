@@ -48,6 +48,8 @@ export class Game {
   constructor(app) {
     this.app = app;
 
+    this.nativeCanvas = document.getElementById("app")
+
     this.deadHouses = []
     this.houses = []
 
@@ -148,37 +150,50 @@ export class Game {
     app.loader.baseUrl = "../static/assets";
     app.loader
       .add("background", "./static/assets/sheet/background.png")
-      .add("bg_tiled_layer1", "bg_tiled_layer1.png", options)
-      .add("bg_tiled_layer2", "bg_tiled_layer2_stars.png", options)
       .add(
         "bunny",
         "https://pixijs.io/examples/examples/assets/bunny.png",
         options
       )
       .add("buildings", "./static/assets/sheet/buildings.png")
-      .add("my-map", "my-map.json", options);
 
-    app.loader.load(() => {  
-      setTimeout(async () => {
+    app.loader.load(() => {
+      setTimeout(() => {
         this.app.preloader.hide();
         this.loadTextures()
-        this.app.runners.initLevel.run(this.level);
-        this.level.init(this.app);
-        this.level.startGenerateDrops()
-        this.app.mouse.init()
 
         Object.keys(this.labels).forEach(label => {
           app.stage.addChild(this.labels[label].text)
         })
-        this.loadBackgrounds()
-      }, 3000);
+        this.app.stage.addChild(this.tempLabels.notification.changeTo("premise").chanseFontSize(0.015).text)
 
-      this.intervals.donatesHouses = setInterval(() => {
-        // one house produces 1$ per second
-        this.incrementDonates(this.houses.length - this.deadHouses.length)
-        this.updateHousesPersentage(this.houses.length)
+        this.app.renderer.view.addEventListener('click', this.onBegicClick.bind(this));
       }, 1000)
     });
+  }
+
+  onBegicClick() {
+    this.begin()
+  }
+
+  begin() {
+    this.app.renderer.view.removeEventListener('click', this.onBegicClick);
+    // hide this stuff
+    this.app.stage.removeChild(this.tempLabels.notification.text)
+    this.tempLabels.notification.changeTo("failed")
+
+    // init level
+    this.app.runners.initLevel.run(this.level);
+    this.loadBackgrounds()
+    this.level.init(this.app);
+    this.level.startGenerateDrops()
+    this.app.mouse.init()
+
+
+    this.intervals.donatesHouses = setInterval(() => {
+      // one house produces 1$ per second
+      this.incrementDonates(this.houses.length - this.deadHouses.length)
+    }, 1000)
   }
 
   loadTextures() {
@@ -214,9 +229,9 @@ export class Game {
   incrementDonates(income) {
     this.labels.donates.addAndUpdate(income)
   }
-  updateHousesPersentage(houses) {
+  updateHousesPersentage() {
     // this.labels.housesPersentage.update(`${houses}/${this.level.initialHousesNumber}`)
-    this.labels.housesPersentage.update(Math.floor(100 * houses / this.level.initialHousesNumber))
+    this.labels.housesPersentage.update(Math.floor(100 * this.houses.length / this.level.initialHousesNumber))
   }
 
   removeHouse(entity) {
@@ -229,9 +244,8 @@ export class Game {
       (this.level.initialHousesNumber > FAILED_HOUSE_HUMBER_CONDITION &&  this.houses.length <= FAILED_HOUSE_HUMBER_CONDITION) ||
       (this.level.initialHousesNumber <= FAILED_HOUSE_HUMBER_CONDITION && this.houses.length <= 0)
     ) {
-      clearInterval(this.intervals.donatesHouses)
-      this.level.stopGenerateDrops()
       this.app.stage.addChild(this.tempLabels.notification.text)
+      this.level.stopGenerateDrops()
       this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
       this.entities[GROUPS.DROP].forEach(this.app.game.remove)
       setTimeout(() => {

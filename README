@@ -31,14 +31,14 @@
   3. Clouds
   4. Umbrella
   5. Drops
-3. Add umblrella improvement after level ends
-  1. Make it wider
+3. (DONE) Add rules message at the begining of the game
 4. Add limit of drops(reaching the limit of drops means the level is passed).
-5. If the pesentage of destroyed houses is to big it means player has lost the city.
+5. (done) If the pesentage of destroyed houses is to big it means player has lost the city.
   1. (done) Stop game, show FAILED label
-  2. Move to next level without improvement
+  2. (done) Move to next level without improvement
 6. Add Reward after 10 saved cities. Video with dead enemy
-
+7. Add umblrella improvement after level ends
+  1. Make it wider
 
 
 # TODO V 1.1

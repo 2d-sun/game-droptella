@@ -23,7 +23,7 @@ export class MouseController {
     this.umbrella = this.world.bodies.find(body => body.entity instanceof Umbrella)
 
     pixiRoot.interactive = true;
-    
+
     pixiRoot.on("pointermove", e => {
       const point = pixiRoot.toLocal(e.data.global);
       point.x = -point.x * phys.PIXEL_TO_METER;
@@ -74,8 +74,9 @@ export class MouseController {
   }
 
   _destroyHouse(entity) {
-    this.app.game.checkEndLevelCondition()
     this.app.game.remove(entity)
+    this.app.game.updateHousesPersentage()
+    this.app.game.checkEndLevelCondition()
   }
 
   setState(state) {
