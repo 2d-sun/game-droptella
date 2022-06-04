@@ -114,6 +114,7 @@ export default class LevelDrops {
   init(app) {
     const {world} = app.phys
     
+    app.game.pixiRoot.sortableChildren = true
     app.game.pixiRoot.position.set(2048, 1024);
     world.overlapKeeper.recordPool.resize(16);
     world.narrowphase.contactEquationPool.resize(1024);
@@ -220,14 +221,14 @@ export default class LevelDrops {
 
     for(;;) {
       let spawnMs = Math.random() < 0.2 ? 500 : 1000
+      await new Promise(resolve => setTimeout(resolve, spawnMs));
+      if (!this.generateGrops) continue
+
       options.destroyMs = Math.random() <= 0.1 ? getRandomIntWithStep(1000, 1500, 100) : getRandomIntWithStep(1500, 6000, 1000)
       options.position = [getRandomInt(this.options.xmin, this.options.xmax), this.options.ymax]
-      await new Promise(resolve => setTimeout(resolve, spawnMs));
+
       const drop = new Drop({options})
       game.add(drop);
-      // drop.body.destroyTimeout = setTimeout(() => {
-      //   game.remove(drop)
-      // }, options.destroyMs)
     }
   }
 
@@ -247,5 +248,13 @@ export default class LevelDrops {
     const max = this._getMaxHouseHeight()
     const min = this.options.height/2/this.options.scale
     return getRandomInt(min, max)
+  }
+
+  startGenerateDrops() {
+    this.generateGrops = true
+  }
+
+  stopGenerateDrops() {
+    this.generateGrops = false
   }
 }

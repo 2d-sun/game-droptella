@@ -111,6 +111,7 @@ export class Phys {
     const groupType = entity.getName()
 
     const debug = (this.debug = new PIXI.Graphics());
+    debug.zIndex = 10
     if (groupType === GROUPS.DROP) {
       shapes.forEach(shape => this._drawDrop(debug, shape, body))
     } else if (groupType === GROUPS.UMBRELLA) {
@@ -148,6 +149,7 @@ export class Phys {
     house.height = shape.height * this.METER_TO_PIXEL
     house.body = this;
     house.visible = false
+    house.zIndex = 1000
     return house
   }
 

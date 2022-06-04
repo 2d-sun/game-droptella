@@ -11,6 +11,7 @@ export default class Label {
       fontWeight: "bold",
       fill: ["#ffffff"],
       stroke: "#4a1850",
+      zIndex: 500,
       dropShadow: true,
       ...customStyle
     });

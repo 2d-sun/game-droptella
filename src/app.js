@@ -13,10 +13,7 @@ export class App {
     this.application = new PIXI.Application({
       resizeTo: window,
       resolution: 1,
-      autoResize: true,
-      // resolution: devicePixelRatio
-      // width: 1280,
-      // height: 720,
+      autoResize: true
     })
 
     window.app = this

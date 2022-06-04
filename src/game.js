@@ -5,6 +5,7 @@ import Label from "./labels/label"
 import donates from "./labels/donates"
 import missed from "./labels/missed"
 import housesPersentage from "./labels/housesPersentage"
+import failed from "./labels/failed"
 import catched from "./labels/catched"
 import GROUPS from "./entities/groups"
 
@@ -62,6 +63,14 @@ export class Game {
       missed,
       catched,
       housesPersentage
+    }
+
+    this.tempLabels = {
+      failed
+    }
+
+    this.intervals = {
+      donatesHouses: null
     }
 
     // for (let i=0; i<=4000; i+=50) {
@@ -134,6 +143,7 @@ export class Game {
     const options = { crossOrigin: "*" };
     app.loader.baseUrl = "../static/assets";
     app.loader
+      .add("background", "./static/assets/sheet/background.png")
       .add("bg_tiled_layer1", "bg_tiled_layer1.png", options)
       .add("bg_tiled_layer2", "bg_tiled_layer2_stars.png", options)
       .add(
@@ -143,38 +153,23 @@ export class Game {
       )
       .add("buildings", "./static/assets/sheet/buildings.png")
       .add("my-map", "my-map.json", options);
-    // const spritesheetPath = new URL("static/assets/sheet", window.location.origin).href
-    // const buildingsTexture  = new URL(`${spritesheetPath}/buildings.png`, window.location.origin).href
-    // const buildingsData   = new URL(`${spritesheetPath}/spritesheet.json`, window.location.origin).href
 
-    // app.loader.shared.add(
-    //   new URL(`${spritesheetPath}/spritesheet.png`, window.location.origin).href,
-    //   options
-    // ).load(() => {
-    //   const spritesheet = new URL(`${spritesheetPath}/spritesheet.json`, window.location.origin).href
-    //   let sheet = PIXI.Loader.shared.resources[spritesheet].spritesheet;
-    //   let sprite = new PIXI.Sprite(sheet.textures["buildings.png"]);
-    // })
-
-    // const sheet = new PIXI.Spritesheet(buildingsTexture, buildingsData);
-    // sheet.parse(() => console.log('Spritesheet ready to use!'));
-    // console.log("bbb", sheet)
-    
-
-    app.loader.load(() => {      
+    app.loader.load(() => {  
       setTimeout(async () => {
         this.app.preloader.hide();
         this.loadTextures()
         this.app.runners.initLevel.run(this.level);
         this.level.init(this.app);
+        this.level.startGenerateDrops()
         this.app.mouse.init()
 
         Object.keys(this.labels).forEach(label => {
           app.stage.addChild(this.labels[label].text)
         })
+        this.loadBackgrounds()
       }, 3000);
 
-      setInterval(() => {
+      this.intervals.donatesHouses = setInterval(() => {
         // one house produces 1$ per second
         this.incrementDonates(this.houses.length - this.deadHouses.length)
         this.updateHousesPersentage(this.houses.length)
@@ -196,6 +191,16 @@ export class Game {
     }
   }
 
+  loadBackgrounds() {
+    let tiling = new PIXI.Sprite(app.loader.resources["background"].texture, window.innerWidth, window.innerHeight);
+    tiling.anchor.set(0, 0);
+    tiling.position.set(-2048, -1024);
+    tiling.zIndex = 0
+    tiling.width = window.innerWidth
+    tiling.height = window.innerHeight
+    this.pixiRoot.addChild(tiling);
+  }
+
   incrementCatched() {
     this.labels.catched.incrementAndUpdate()
   }
@@ -213,5 +218,16 @@ export class Game {
   removeHouse(entity) {
     this.remove(entity)
     this.deadHouses.push(entity)
+  }
+
+  checkEndLevelCondition() {
+    if (
+      (this.level.initialHousesNumber > 3 &&  this.houses.length <= 3) ||
+      (this.level.initialHousesNumber <= 3 && this.houses.length <= 0)
+    ) {
+      clearInterval(this.intervals.donatesHouses)
+      this.level.stopGenerateDrops()
+      this.app.stage.addChild(this.tempLabels.failed.text)
+    }
   }
 }

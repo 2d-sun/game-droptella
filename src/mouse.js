@@ -74,6 +74,7 @@ export class MouseController {
   }
 
   _destroyHouse(entity) {
+    this.app.game.checkEndLevelCondition()
     this.app.game.remove(entity)
   }
 

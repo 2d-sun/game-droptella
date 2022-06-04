@@ -22,16 +22,21 @@
 
 # TODO V 1.0
 0. ZOOM
-1. Add persentage to see number of destroyed houses and houses which are left
+ 1. (done) Scale on load
+ 2. (cancel)Scale on zoom
+1. (done) Add persentage to see number of destroyed houses and houses which are left
 2. Add sprites
-  1. Background
-  2. Houses
+  1. (done) Background
+  2. (done) Houses
   3. Clouds
   4. Umbrella
   5. Drops
 3. Add umblrella improvement after level ends
-4. Add limit of drops(reaching the limit of drops means the level is passed). If the pesentage of destroyed houses is to big it means player has lost the city.
-5. Add Reward after 10 saved cities. Video with dead enemy
+  1. Make it wider
+4. Add limit of drops(reaching the limit of drops means the level is passed).
+5. If the pesentage of destroyed houses is to big it means player has lost the city.
+  1. Move to next level without improvement
+6. Add Reward after 10 saved cities. Video with dead enemy
 
 
 
