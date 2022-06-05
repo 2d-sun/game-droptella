@@ -3,7 +3,7 @@ export default {
   catched: "CATCHED",
   missed: "MISSED",
   housesPersentage: "HEALTH",
-  failed: "FAILED",
+  failed: "You've lost the city. Not the enemy has more suply for the next one. Good luck.",
   start: "LETS PROTECT",
   premise: [
     "The enemy has failed. But they still have bombs. Protect our towns, while we will take care of their command centres."

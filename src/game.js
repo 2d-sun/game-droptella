@@ -77,7 +77,8 @@ export class Game {
 
     this.tempLabels = {
       notification: new Notification(),
-      subtext: new Notification("clickToProceed")
+      subtext: new Notification("clickToProceed"),
+      tryAgain: new Notification("tryAgain"),
     }
 
     this.intervals = {
@@ -192,7 +193,7 @@ export class Game {
     this.app.stage.removeChild(this.tempLabels.subtext.text)
   }
 
-  begin(e) {
+  begin() {
     this.app.renderer.view.removeEventListener("touchstart", this.beginWithContext);
     this.app.renderer.view.removeEventListener("mousedown", this.beginWithContext);
     // hide this stuff
@@ -271,6 +272,7 @@ export class Game {
     this.level.stopGenerateDrops()
     this.addClickToProceedLabel()
     this.removeStageEntities()
+    this.level.increaseDropsLimit()
     this.enableNextStageTap()
   }
 
@@ -290,6 +292,7 @@ export class Game {
 
   runWinCondition() {
     this.savedCity++
+    this.level.dropDropsLimit()
     clearInterval(this.intervals.checkWinConditionInterval)
     this.app.stage.addChild(this.tempLabels.notification.changeTo("victory").text)
     this.addClickToProceedLabel()
@@ -303,14 +306,14 @@ export class Game {
       return
     }
     this.stagesToFullVictory--
+    this.isNextStageLoads = true
+    this.removeClickToProceedLabel()
+    this.disableNextStageTap()
 
     if (this.stagesToFullVictory === 0) {
       return this.showFullVictoryStage()
     }
 
-    this.isNextStageLoads = true
-    this.removeClickToProceedLabel()
-    this.disableNextStageTap()
     this.app.level.dropsNumber = 0
     setTimeout(() => {
       this.level.addUmrella(this.app) 
