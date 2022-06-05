@@ -22,6 +22,11 @@ export default class Notification extends Label {
     return this
   }
 
+  changeToFn(label, args) {
+    this.text.text = localization[label](...args)
+    return this
+  }
+
   chanseFontSize(fontSize) {
     this.text.style.fontSize = fontSize * window.innerWidth
     return this

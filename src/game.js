@@ -42,7 +42,8 @@ class MeasureX extends Label {
   }
 }
 
-const FAILED_HOUSE_HUMBER_CONDITION = 4
+const FAILED_HOUSE_HUMBER_CONDITION = 26
+const STAGES_TO_FULL_VICTORY = 2
 
 export class Game {
   constructor(app) {
@@ -52,6 +53,9 @@ export class Game {
 
     this.deadHouses = []
     this.houses = []
+    this.stagesToFullVictory = STAGES_TO_FULL_VICTORY
+    this.savedCity = 0
+    this.lostCity  = 0
 
     this.textures = {}
 
@@ -262,6 +266,7 @@ export class Game {
   }
 
   runFailCondition() {
+    this.lostCity++
     this.app.stage.addChild(this.tempLabels.notification.changeTo("failed").text)
     this.level.stopGenerateDrops()
     this.entities[GROUPS.DROP].forEach(this.app.game.remove)
@@ -289,6 +294,7 @@ export class Game {
   }
 
   runWinCondition() {
+    this.savedCity++
     clearInterval(this.intervals.checkWinConditionInterval)
     this.app.stage.addChild(this.tempLabels.notification.changeTo("victory").text)
     this.addClickToProceedLabel()
@@ -308,6 +314,12 @@ export class Game {
     if (this.isNextStageLoads) {
       return
     }
+    this.stagesToFullVictory--
+
+    if (this.stagesToFullVictory === 0) {
+      return this.showFullVictoryStage()
+    }
+
     this.isNextStageLoads = true
     this.removeClickToProceedLabel()
     this.app.renderer.view.removeEventListener("mousedown", this.nextStageWithContext);
@@ -327,5 +339,9 @@ export class Game {
       this.app.stage.removeChild(this.tempLabels.notification.text)
       this.level.startGenerateDrops()
     }, 1500)
+  }
+
+  showFullVictoryStage() {
+    this.app.stage.addChild(this.tempLabels.notification.changeToFn("fullVictory", [this.savedCity, this.lostCity]).text)
   }
 }
