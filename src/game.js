@@ -269,14 +269,9 @@ export class Game {
     this.lostCity++
     this.app.stage.addChild(this.tempLabels.notification.changeTo("failed").text)
     this.level.stopGenerateDrops()
-    this.entities[GROUPS.DROP].forEach(this.app.game.remove)
-    this.entities[GROUPS.UMBRELLA].forEach(this.app.game.remove)
-    this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
-    this.isHousesLoaded = false
-    this.isNextStageLoads = false
-    setTimeout(() => {
-      this.nextStage()
-    }, 5000)
+    this.addClickToProceedLabel()
+    this.removeStageEntities()
+    this.enableNextStageTap()
   }
 
   checkWinCondition() {
@@ -298,15 +293,8 @@ export class Game {
     clearInterval(this.intervals.checkWinConditionInterval)
     this.app.stage.addChild(this.tempLabels.notification.changeTo("victory").text)
     this.addClickToProceedLabel()
-
-    this.entities[GROUPS.DROP].forEach(this.app.game.remove)
-    this.entities[GROUPS.UMBRELLA].forEach(this.app.game.remove)
-    this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
-    
-    this.isNextStageLoads = false
-    this.isHousesLoaded = false
-    this.app.renderer.view.addEventListener("mousedown", this.nextStageWithContext);
-    this.app.renderer.view.addEventListener("touchstart", this.nextStageWithContext);
+    this.removeStageEntities()
+    this.enableNextStageTap()
     this.level.upgradeUmbrella(0.5)
   }
 
@@ -322,8 +310,7 @@ export class Game {
 
     this.isNextStageLoads = true
     this.removeClickToProceedLabel()
-    this.app.renderer.view.removeEventListener("mousedown", this.nextStageWithContext);
-    this.app.renderer.view.removeEventListener("touchstart", this.nextStageWithContext);
+    this.disableNextStageTap()
     this.app.level.dropsNumber = 0
     setTimeout(() => {
       this.level.addUmrella(this.app) 
@@ -343,5 +330,23 @@ export class Game {
 
   showFullVictoryStage() {
     this.app.stage.addChild(this.tempLabels.notification.changeToFn("fullVictory", [this.savedCity, this.lostCity]).text)
+  }
+
+  enableNextStageTap() {
+    this.isNextStageLoads = false
+    this.isHousesLoaded = false
+    this.app.renderer.view.addEventListener("mousedown", this.nextStageWithContext);
+    this.app.renderer.view.addEventListener("touchstart", this.nextStageWithContext);
+  }
+
+  disableNextStageTap() {
+    this.app.renderer.view.removeEventListener("mousedown", this.nextStageWithContext);
+    this.app.renderer.view.removeEventListener("touchstart", this.nextStageWithContext);
+  }
+
+  removeStageEntities() {
+    this.entities[GROUPS.DROP].forEach(this.app.game.remove)
+    this.entities[GROUPS.UMBRELLA].forEach(this.app.game.remove)
+    this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
   }
 }
