@@ -14,7 +14,7 @@ export class App {
       resizeTo: window,
       resolution: 1,
       autoResize: true,
-      antialias: true
+      antialias: window.innerWidth <= 2880 // prevent laging on bigger screens
     })
 
     window.app = this
