@@ -41,7 +41,7 @@
   1. (DONE) Make it wider
 
 # TODO V 1.0
-1. subtract money on upgrade
+1. (DONE) subtract money on upgrade
 2. (DONE) incrase number of bombs for the next stage if failed
 3. (DONE) add onClick event on fail
 5. (DONE) Add fullVictory message in the end of game

@@ -9,6 +9,7 @@ function getRandomInt(min, max) {
 }
 
 const DROPS_LIMIT = 50
+const UPGRAGE_PRICE = 1000
 
 export default class LevelDrops {
   constructor(app) {
@@ -271,7 +272,14 @@ export default class LevelDrops {
   }
 
   upgradeUmbrella(improvementPoint) {
+    const upgradePrice = UPGRAGE_PRICE
+
+    if (this.app.game.getDonates() < upgradePrice) {
+      return
+    }
+
     this.umbrellaWidthLevel += improvementPoint
+    this.app.game.incrementDonates(-upgradePrice)
   }
 
   _getMaxHouseHeight() {

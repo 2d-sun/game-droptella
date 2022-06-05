@@ -42,7 +42,7 @@ class MeasureX extends Label {
   }
 }
 
-const FAILED_HOUSE_HUMBER_CONDITION = 26
+const FAILED_HOUSE_HUMBER_CONDITION = 4
 const STAGES_TO_FULL_VICTORY = 2
 
 export class Game {
@@ -248,6 +248,9 @@ export class Game {
   incrementDonates(income) {
     this.labels.donates.addAndUpdate(income)
   }
+  getDonates() {
+    return this.labels.donates.donate
+  }
   updateHousesPersentage() {
     this.labels.housesPersentage.update(Math.floor(100 * this.houses.length / this.level.initialHousesNumber))
   }
@@ -285,7 +288,7 @@ export class Game {
         .forEach(this.app.game.remove)
 
       if (this.entities[GROUPS.DROP].length === 0) {
-        this.app.game.runWinCondition()
+        this.runWinCondition()
       }
     }, 1000)
   }
