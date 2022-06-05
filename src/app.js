@@ -13,7 +13,8 @@ export class App {
     this.application = new PIXI.Application({
       resizeTo: window,
       resolution: 1,
-      autoResize: true
+      autoResize: true,
+      antialias: true
     })
 
     window.app = this

@@ -9,7 +9,7 @@ export default class Label {
       fontFamily: "Arial",
       fontSize,
       fontWeight: "bold",
-      fill: ["#ffffff"],
+      fill: ["#bbbbbb"],
       stroke: "#4a1850",
       zIndex: 500,
       dropShadow: true,
@@ -18,6 +18,7 @@ export default class Label {
 
 
     this.text = new PIXI.Text(text, style);
+    this.text.roundPixels = true
 
     this.#listenResize()
   }

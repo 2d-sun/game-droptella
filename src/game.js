@@ -5,7 +5,7 @@ import Label from "./labels/label"
 import donates from "./labels/donates"
 import missed from "./labels/missed"
 import housesPersentage from "./labels/housesPersentage"
-import notification from "./labels/notification"
+import Notification from "./labels/notification"
 import catched from "./labels/catched"
 import GROUPS from "./entities/groups"
 
@@ -72,7 +72,8 @@ export class Game {
     }
 
     this.tempLabels = {
-      notification
+      notification: new Notification(),
+      subtext: new Notification("clickToProceed")
     }
 
     this.intervals = {
@@ -150,11 +151,7 @@ export class Game {
     app.loader.baseUrl = "../static/assets";
     app.loader
       .add("background", "./static/assets/sheet/background.png")
-      .add(
-        "bunny",
-        "https://pixijs.io/examples/examples/assets/bunny.png",
-        options
-      )
+      .add("bunny","https://pixijs.io/examples/examples/assets/bunny.png",options)
       .add("buildings", "./static/assets/sheet/buildings.png")
 
     app.loader.load(() => {
@@ -165,22 +162,30 @@ export class Game {
         Object.keys(this.labels).forEach(label => {
           app.stage.addChild(this.labels[label].text)
         })
-        this.app.stage.addChild(this.tempLabels.notification.changeTo("premise").chanseFontSize(0.015).text)
+        this.app.stage.addChild(this.tempLabels.notification.changeTo("premise", 0).chanseFontSize(0.015).text)
 
-        this.app.renderer.view.addEventListener('click', this.onBegicClick.bind(this));
+        this.app.stage.addChild(this.tempLabels.subtext
+          .chanseFontSize(0.01)
+          //.setX(window.innerWidth/2 + this.tempLabels.notification.text.width)
+          .setY(window.innerHeight/2 + this.tempLabels.notification.text.height)
+          .text
+        )
+
+
+        this.beginWithContext = this.begin.bind(this)
+        this.app.renderer.view.addEventListener("click", this.beginWithContext);
+        this.app.renderer.view.addEventListener("touchend", this.beginWithContext);
       }, 1000)
     });
   }
 
-  onBegicClick() {
-    this.begin()
-  }
-
   begin() {
-    this.app.renderer.view.removeEventListener('click', this.onBegicClick);
+    this.app.renderer.view.removeEventListener("touchend", this.beginWithContext);
+    this.app.renderer.view.removeEventListener("click", this.beginWithContext);
     // hide this stuff
     this.app.stage.removeChild(this.tempLabels.notification.text)
-    this.tempLabels.notification.changeTo("failed")
+    this.app.stage.removeChild(this.tempLabels.subtext.text)
+    this.tempLabels.notification.changeTo("failed").chanseFontSize(0.04)
 
     // init level
     this.app.runners.initLevel.run(this.level);

@@ -1,17 +1,24 @@
-import * as PIXI from "pixi.js";
 import Label from "./label"
 import localization from "../localization";
 
 
-class Failed extends Label {
-  constructor() {
-    super(localization.failed, {fontSize: window.innerWidth * 0.3})
-    this.text.y = window.innerHeight/2 - 200
-    this.text.x = window.innerWidth/2 - 200
+export default class Notification extends Label {
+  constructor(localizationKey = "failed") {
+    super(localization[localizationKey], {
+      fontSize: window.innerWidth * 0.3,
+      wordWrap: true,
+      wordWrapWidth: 440,
+    })
+    this.text.y = window.innerHeight/2
+    this.text.x = window.innerWidth/2
+    this.text.anchor.set(0.5);
   }
 
-  changeTo(label) {
-    this.text.text = localization[label]
+  changeTo(label, index) {
+    let loc = localization[label]
+
+    if (index !== undefined) loc = loc[index]
+    this.text.text = loc
     return this
   }
 
@@ -20,6 +27,3 @@ class Failed extends Label {
     return this
   }
 }
-
-
-export default new Failed()
