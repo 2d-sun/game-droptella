@@ -7,17 +7,16 @@ export default class Umbrella extends Entity {
     super(dict, visual)
 
     this.name = GROUPS.UMBRELLA
+    this.width = 0.5
     this.#init()
   }
 
   #init() {
     const options = this.dict.options
 
+    this.width += this.dict.options.widthInc || 0
     
-
-    // const height = options.height / (options.scale * 2)
-    // const width  = options.width / (options.scale / 2)
-    const width  = window.innerWidth/1000*2
+    const width  = (window.innerWidth/1000*(this.width))
     const height = window.innerHeight/10000*3
 
     this.dict.body = new Body({
@@ -35,7 +34,6 @@ export default class Umbrella extends Entity {
       // collisionGroup: GROUPS.UMBRELLA,
       // collisionMask: GROUPS.DROP
     }));
-
     this.body = this.dict.body
   }
 }

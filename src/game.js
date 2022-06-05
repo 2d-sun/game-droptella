@@ -42,7 +42,7 @@ class MeasureX extends Label {
   }
 }
 
-const FAILED_HOUSE_HUMBER_CONDITION = 3
+const FAILED_HOUSE_HUMBER_CONDITION = 4
 
 export class Game {
   constructor(app) {
@@ -164,27 +164,36 @@ export class Game {
         })
         this.app.stage.addChild(this.tempLabels.notification.changeTo("premise", 0).chanseFontSize(0.015).text)
 
-        this.app.stage.addChild(this.tempLabels.subtext
-          .chanseFontSize(0.01)
-          //.setX(window.innerWidth/2 + this.tempLabels.notification.text.width)
-          .setY(window.innerHeight/2 + this.tempLabels.notification.text.height)
-          .text
-        )
+        this.addClickToProceedLabel()
 
 
         this.beginWithContext = this.begin.bind(this)
-        this.app.renderer.view.addEventListener("click", this.beginWithContext);
-        this.app.renderer.view.addEventListener("touchend", this.beginWithContext);
+        this.nextStageWithContext = this.nextStage.bind(this)
+        this.app.renderer.view.addEventListener("mousedown", this.beginWithContext);
+        this.app.renderer.view.addEventListener("touchstart", this.beginWithContext);
       }, 1000)
     });
   }
 
-  begin() {
-    this.app.renderer.view.removeEventListener("touchend", this.beginWithContext);
-    this.app.renderer.view.removeEventListener("click", this.beginWithContext);
+  addClickToProceedLabel() {
+    this.app.stage.addChild(this.tempLabels.subtext
+      .chanseFontSize(0.01)
+      //.setX(window.innerWidth/2 + this.tempLabels.notification.text.width)
+      .setY(window.innerHeight/2 + this.tempLabels.notification.text.height)
+      .text
+    )
+  }
+
+  removeClickToProceedLabel() {
+    this.app.stage.removeChild(this.tempLabels.subtext.text)
+  }
+
+  begin(e) {
+    this.app.renderer.view.removeEventListener("touchstart", this.beginWithContext);
+    this.app.renderer.view.removeEventListener("mousedown", this.beginWithContext);
     // hide this stuff
     this.app.stage.removeChild(this.tempLabels.notification.text)
-    this.app.stage.removeChild(this.tempLabels.subtext.text)
+    this.removeClickToProceedLabel()
     this.tempLabels.notification.changeTo("failed").chanseFontSize(0.04)
 
     // init level
@@ -235,7 +244,6 @@ export class Game {
     this.labels.donates.addAndUpdate(income)
   }
   updateHousesPersentage() {
-    // this.labels.housesPersentage.update(`${houses}/${this.level.initialHousesNumber}`)
     this.labels.housesPersentage.update(Math.floor(100 * this.houses.length / this.level.initialHousesNumber))
   }
 
@@ -249,23 +257,75 @@ export class Game {
       (this.level.initialHousesNumber > FAILED_HOUSE_HUMBER_CONDITION &&  this.houses.length <= FAILED_HOUSE_HUMBER_CONDITION) ||
       (this.level.initialHousesNumber <= FAILED_HOUSE_HUMBER_CONDITION && this.houses.length <= 0)
     ) {
-      this.app.stage.addChild(this.tempLabels.notification.text)
-      this.level.stopGenerateDrops()
-      this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
-      this.entities[GROUPS.DROP].forEach(this.app.game.remove)
-      setTimeout(() => {
-        this.nextStage()
-      }, 5000)
+      this.runFailCondition()
     }
   }
 
+  runFailCondition() {
+    this.app.stage.addChild(this.tempLabels.notification.changeTo("failed").text)
+    this.level.stopGenerateDrops()
+    this.entities[GROUPS.DROP].forEach(this.app.game.remove)
+    this.entities[GROUPS.UMBRELLA].forEach(this.app.game.remove)
+    this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
+    this.isHousesLoaded = false
+    this.isNextStageLoads = false
+    setTimeout(() => {
+      this.nextStage()
+    }, 5000)
+  }
+
+  checkWinCondition() {
+    this.level.stopGenerateDrops()
+
+    this.intervals.checkWinConditionInterval = setInterval(() => {
+      this.entities[GROUPS.DROP]
+        .filter(({body}) => body.velocity[0] === 0 && body.velocity[1] === 0)
+        .forEach(this.app.game.remove)
+
+      if (this.entities[GROUPS.DROP].length === 0) {
+        this.app.game.runWinCondition()
+      }
+    }, 1000)
+  }
+
+  runWinCondition() {
+    clearInterval(this.intervals.checkWinConditionInterval)
+    this.app.stage.addChild(this.tempLabels.notification.changeTo("victory").text)
+    this.addClickToProceedLabel()
+
+    this.entities[GROUPS.DROP].forEach(this.app.game.remove)
+    this.entities[GROUPS.UMBRELLA].forEach(this.app.game.remove)
+    this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
+    
+    this.isNextStageLoads = false
+    this.isHousesLoaded = false
+    this.app.renderer.view.addEventListener("mousedown", this.nextStageWithContext);
+    this.app.renderer.view.addEventListener("touchstart", this.nextStageWithContext);
+    this.level.upgradeUmbrella(0.5)
+  }
+
   nextStage() {
-    this.level.addHouses(this.app)
-    this.tempLabels.notification.changeTo("start")
+    if (this.isNextStageLoads) {
+      return
+    }
+    this.isNextStageLoads = true
+    this.removeClickToProceedLabel()
+    this.app.renderer.view.removeEventListener("mousedown", this.nextStageWithContext);
+    this.app.renderer.view.removeEventListener("touchstart", this.nextStageWithContext);
+    this.app.level.dropsNumber = 0
+    setTimeout(() => {
+      this.level.addUmrella(this.app) 
+    }, 1000)
+    setTimeout(() => {
+      if (this.isHousesLoaded) return
+      this.tempLabels.notification.changeTo("start")
+      this.isHousesLoaded = true
+      this.app.level.initialHousesNumber = 0
+      this.level.addHouses(this.app)
+    }, 1000)
     setTimeout(() => {
       this.app.stage.removeChild(this.tempLabels.notification.text)
-      this.tempLabels.notification.changeTo("failed")
       this.level.startGenerateDrops()
-    }, 1000)
+    }, 1500)
   }
 }

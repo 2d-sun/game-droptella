@@ -15,6 +15,10 @@ export class MouseController {
     this.umbrella = null;
   }
 
+  setUmbrella(umbrella) {
+    this.umbrella = umbrella
+  }
+
   init() {
     const { pixiRoot } = this.app.game;
     const { phys } = this.app;

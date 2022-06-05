@@ -8,6 +8,8 @@ function getRandomInt(min, max) {
   return Math.random() * (max - min) + min
 }
 
+const DROPS_LIMIT = 100
+
 export default class LevelDrops {
   constructor(app) {
     this.app = app
@@ -19,6 +21,9 @@ export default class LevelDrops {
     this.warp = false;
 
     this.topKo = 0.05
+
+    this.dropsNumber = 0
+    this.dropsLimit  = DROPS_LIMIT // aproximatlry, 300 seconds
 
     let 
       xmin = this._getXMin(),
@@ -40,12 +45,21 @@ export default class LevelDrops {
     window.levelOptions = this.options
 
     this.initialHousesNumber = 0
+    this.umbrellaWidthLevel = 0
 
     window.addEventListener("resize", () => {
       requestAnimationFrame(() => {
         this.options.ymin = this._getYMin()
       })
     })
+  }
+
+  setDropsLimit(dropsLimit) {
+    this.dropsLimit = dropsLimit
+  }
+
+  getDropsLimit() {
+    return this.dropsLimit
   }
 
   _getYMin() {
@@ -129,7 +143,7 @@ export default class LevelDrops {
 
     this._addDrop(app)
 
-    this._addUmrella(app)
+    this.addUmrella(app)
 
     this._addGround(app)
 
@@ -227,15 +241,26 @@ export default class LevelDrops {
 
       const drop = new Drop({options})
       game.add(drop);
+      this.dropsNumber++
+
+      if (this.getDropsLimit() <= this.dropsNumber) {
+        this.app.game.checkWinCondition()
+      }
     }
   }
 
-  _addUmrella({game}) {
+  addUmrella({game}) {
     const umbrella = new Umbrella({options: {
       ...this.options,
+      widthInc: this.umbrellaWidthLevel,
       houseHeight: this._getMaxHouseHeight()
     }})
+    this.app.mouse.setUmbrella(umbrella.body)
     game.add(umbrella)
+  }
+
+  upgradeUmbrella(improvementPoint) {
+    this.umbrellaWidthLevel += improvementPoint
   }
 
   _getMaxHouseHeight() {
