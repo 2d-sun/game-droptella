@@ -3,11 +3,12 @@ import localization from "../localization";
 
 
 export default class Notification extends Label {
-  constructor(localizationKey = "failed") {
+  constructor(localizationKey = "failed", options ={}) {
     super(localization[localizationKey], {
       fontSize: window.innerWidth * 0.3,
       wordWrap: true,
       wordWrapWidth: window.innerWidth/4,
+      ...options
     })
     this.text.y = window.innerHeight/2
     this.text.x = window.innerWidth/2

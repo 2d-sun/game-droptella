@@ -20,5 +20,6 @@ export default {
     const lostCityLabel = lostCity > 1 ? "міст" : "місто"
     
     return `${constantMessage} Завдяки вам, ми врятували ${savedCity} ${savedCityLabel}. Проте також ми втратили ${lostCity} ${lostCityLabel}. Та ми відбудуємо їх. Слава Україні.`
-  }
+  },
+  widescreenRatioSupportAlert: "Дуже шкода, але зараз ми підтримуємо лише широкоекранний формат. Будь ласка, поверніть пристрій і перезавантажте сторінку."
 }

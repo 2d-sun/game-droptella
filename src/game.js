@@ -79,6 +79,10 @@ export class Game {
       notification: new Notification(),
       subtext: new Notification("clickToProceed"),
       tryAgain: new Notification("tryAgain"),
+      widescreenSupportAlert: new Notification("widescreenRatioSupportAlert", {
+        fontSize: window.innerWidth * 0.05,
+        wordWrapWidth: window.innerWidth
+      })
     }
 
     this.intervals = {
@@ -162,6 +166,13 @@ export class Game {
     app.loader.load(() => {
       setTimeout(() => {
         this.app.preloader.hide();
+
+        // temporary solution for horizontal ratio
+        if (this.app.renderer.width < this.app.renderer.height) {
+          this.app.stage.addChild(this.tempLabels.widescreenSupportAlert.text)
+          return
+        }
+
         this.loadTextures()
 
         Object.keys(this.labels).forEach(label => {

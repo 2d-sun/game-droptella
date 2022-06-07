@@ -20,5 +20,6 @@ export default {
     const lostCityLabel = lostCity > 1 ? "city" : "cities"
     
     return `${constantMessage} You saved ${savedCity} ${savedCityLabel}. You lost ${lostCity} ${lostCityLabel}. But we will rebuild them. Glory to Ukraine.`
-  }
+  },
+  widescreenRatioSupportAlert: "We are sorry. But currently we support only widescreen aspect ratio. Please rotate you device and reload the page."
 }
