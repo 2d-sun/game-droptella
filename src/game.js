@@ -6,6 +6,7 @@ import donates from "./labels/donates"
 import missed from "./labels/missed"
 import housesPersentage from "./labels/housesPersentage"
 import Notification from "./labels/notification"
+import SupportUkraineLabel from "./labels/supportUkraine"
 import catched from "./labels/catched"
 import GROUPS from "./entities/groups"
 
@@ -83,6 +84,13 @@ export class Game {
         fontSize: window.innerWidth * 0.05,
         wordWrapWidth: window.innerWidth
       })
+    }
+
+    this.supportUkraineLabels = {
+      supportUkrainePrytula: new SupportUkraineLabel("supportUkrainePrytula", {x: window.innerWidth/2, topKo: 0.04}),
+      supportUkraineSafeLifeInUa: new SupportUkraineLabel("supportUkraineSafeLifeInUa", {x: window.innerWidth/2, topKo: 0.07}),
+      supportUkraineInfo: new SupportUkraineLabel("supportUkraineInfo", {x: window.innerWidth/2, topKo: 0.1}),
+      supportUkraineStandWithUkraine: new SupportUkraineLabel("supportUkraineStandWithUkraine", {x: window.innerWidth/2, topKo: 0.14}),
     }
 
     this.intervals = {
@@ -172,9 +180,19 @@ export class Game {
         Object.keys(this.labels).forEach(label => {
           app.stage.addChild(this.labels[label].text)
         })
-        this.app.stage.addChild(this.tempLabels.notification.changeTo("premise", 0).chanseFontSize(0.015).text)
 
-        this.addClickToProceedLabel(this.tempLabels.notification.text.height)
+        Object.values(this.supportUkraineLabels).forEach(label => {
+          this.app.stage.addChild(label.text)
+        })
+
+        this.drawSupportAttraction()
+
+        this.app.stage.addChild(this.tempLabels.notification
+          .setY(this.drawSupportAttractionY)
+          .changeTo("premise", 0)
+          .chanseFontSize(0.015).text)
+
+        this.addClickToProceedLabel(this.tempLabels.notification.text.height, this.drawSupportAttractionY + this.tempLabels.notification.text.height*0.6)
 
 
         this.beginWithContext = this.begin.bind(this)
@@ -185,11 +203,11 @@ export class Game {
     });
   }
 
-  addClickToProceedLabel(height) {
+  addClickToProceedLabel(height, y) {
     this.app.stage.addChild(this.tempLabels.subtext
       .chanseFontSize(0.01)
       //.setX(window.innerWidth/2 + this.tempLabels.notification.text.width)
-      .setY(window.innerHeight/2 + height)
+      .setY(y || window.innerHeight/2 + height)
       .text
     )
   }
@@ -198,7 +216,13 @@ export class Game {
     this.app.stage.removeChild(this.tempLabels.subtext.text)
   }
 
-  begin() {
+  begin(e) {
+    if (this.isClickOnSupportAttraction(e)) {
+      // ignore if mouse is above rectangle for donate attraction
+      return
+    }
+
+
     this.app.renderer.view.removeEventListener("touchstart", this.beginWithContext);
     this.app.renderer.view.removeEventListener("mousedown", this.beginWithContext);
     // hide this stuff
@@ -361,5 +385,63 @@ export class Game {
     this.entities[GROUPS.DROP].forEach(this.app.game.remove)
     this.entities[GROUPS.UMBRELLA].forEach(this.app.game.remove)
     this.entities[GROUPS.HOUSE].forEach(this.app.game.remove)
+  }
+
+  getSupportCoords() {
+
+  }
+
+  drawSupportAttraction() {
+    const lastLabel = this.supportUkraineLabels.supportUkraineStandWithUkraine
+    const labelsValues = Object.values(this.supportUkraineLabels)
+
+    let width  = Math.max(...labelsValues.map(({text})=> text.width)) * 1.1
+
+    const height = lastLabel.text.y + lastLabel.text.height - this.supportUkraineLabels.supportUkrainePrytula.text.y/2
+
+    const x    = window.innerWidth/2 - width/2
+    let y      = Math.min(...labelsValues.map(({text})=> text.y))
+
+
+    const graphics = new PIXI.Graphics();
+
+    graphics.lineStyle(25, 0xFEEB77, 1);
+    graphics.drawRect(x, y - y*0.4, width, height);
+    graphics.endFill();
+
+    graphics.beginFill(0x1305b7);
+    graphics.lineStyle(45, 0x1305b7, 1);
+    graphics.moveTo(x - 20, y * 0.45);
+    graphics.lineTo((window.innerWidth/2 + width/2) + 15, y * 0.45);
+    graphics.closePath();
+    graphics.endFill();
+
+    this.app.stage.addChild(graphics)
+
+    this.drawSupportAttractionY = (
+      lastLabel.text.y +
+      lastLabel.text.height +
+      this.supportUkraineLabels.supportUkrainePrytula.text.y) *
+      1.05
+
+    this.supportAtractionCoors = {
+      x: {
+        min: x,
+        max: window.innerWidth/2 + width/2
+      },
+      y: {
+        min: y - y*0.4,
+        max: (lastLabel.text.y +
+          lastLabel.text.height +
+          this.supportUkraineLabels.supportUkrainePrytula.text.y)
+      }
+    }
+  }
+
+  isClickOnSupportAttraction(e) {
+    const {y, x} = this.supportAtractionCoors
+    console.log("y::", e.clientY, y)
+    console.log("x::", e.clientX, x)
+    return x.min < e.clientX && e.clientX < x.max && y.min < e.clientY && e.clientY < y.max
   }
 }

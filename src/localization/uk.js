@@ -21,5 +21,22 @@ export default {
     
     return `${constantMessage} Завдяки вам, ми врятували ${savedCity} ${savedCityLabel}. Проте також ми втратили ${lostCity} ${lostCityLabel}. Та ми відбудуємо їх. Слава Україні.`
   },
-  widescreenRatioSupportAlert: "Дуже шкода, але зараз ми підтримуємо лише широкоекранний формат. Будь ласка, поверніть пристрій і перезавантажте сторінку."
+  widescreenRatioSupportAlert: "Дуже шкода, але зараз ми підтримуємо лише широкоекранний формат. Будь ласка, поверніть пристрій і перезавантажте сторінку.",
+
+
+  supportUkrainePrytula: {
+    text: "Донат фонду Сергія Притули",
+    url: "https://quicknote.io/e7869010-bf2a-11ec-aabc-9bb4d2c6951f",
+  },
+  supportUkraineSafeLifeInUa: {
+    text: "Донат safelife.in.ua",
+    url: "https://savelife.in.ua/donate/",
+  },
+  supportUkraineInfo: {
+    text: "--> Більше інформацію <--",
+    url: "https://www.comebackalive.in.ua/uk",
+  },
+  supportUkraineStandWithUkraine: {
+    text: "#STANDWITHUKRAINE"
+  }
 }

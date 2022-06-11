@@ -3,7 +3,7 @@ export default {
   catched: "CATCHED",
   missed: "MISSED",
   housesPersentage: "HEALTH",
-  failed: "You've lost the city. Not the enemy has more suply for the next one. Good luck.",
+  failed: "You've lost the city. The enemy has more suply for the next one. Good luck.",
   start: "LETS PROTECT",
   premise: [
     "The enemy has failed. But they still have bombs. Protect our towns, while we will take care of their command centres."
@@ -21,5 +21,22 @@ export default {
     
     return `${constantMessage} You saved ${savedCity} ${savedCityLabel}. You lost ${lostCity} ${lostCityLabel}. But we will rebuild them. Glory to Ukraine.`
   },
-  widescreenRatioSupportAlert: "We are sorry. But currently we support only widescreen aspect ratio. Please rotate you device and reload the page."
+  widescreenRatioSupportAlert: "We are sorry. But currently we support only widescreen aspect ratio. Please rotate you device and reload the page.",
+
+
+  supportUkrainePrytula: {
+    text: "Donate to Serhiy Prytula Foundation",
+    url: "https://quicknote.io/e7869010-bf2a-11ec-aabc-9bb4d2c6951f"
+  },
+  supportUkraineSafeLifeInUa: {
+    text: "Donate to safelife.in.ua",
+    url: "https://savelife.in.ua/en/donate-en/"
+  },
+  supportUkraineInfo: {
+    text: "--> More information <--",
+    url: "https://www.comebackalive.in.ua"
+  },
+  supportUkraineStandWithUkraine: {
+    text: "#STANDWITHUKRAINE"
+  }
 }
