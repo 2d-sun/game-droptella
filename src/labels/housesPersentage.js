@@ -2,8 +2,8 @@ import Label from "./label"
 import localization from "../localization";
 
 class HousesPersentage extends Label {
-  constructor(customStyle) {
-    super(`${localization.housesPersentage}: 100%`, customStyle)
+  constructor(customStyle = {}) {
+    super(`${localization.housesPersentage}: 100%`, {...customStyle, dropShadow: false})
     this.persentage = 0
     this.topKo = 0.1
     this.text.y = window.innerHeight * this.topKo

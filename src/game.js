@@ -42,8 +42,8 @@ class MeasureX extends Label {
   }
 }
 
-const FAILED_HOUSE_HUMBER_CONDITION = 4
-const STAGES_TO_FULL_VICTORY = 2
+const FAILED_HOUSE_HUMBER_CONDITION = 5
+const STAGES_TO_FULL_VICTORY = 10
 
 export class Game {
   constructor(app) {
@@ -77,7 +77,7 @@ export class Game {
 
     this.tempLabels = {
       notification: new Notification(),
-      subtext: new Notification("clickToProceed"),
+      subtext: new Notification("clickToProceed", {dropShadow: false, fill: ['#fff']}),
       tryAgain: new Notification("tryAgain"),
       widescreenSupportAlert: new Notification("widescreenRatioSupportAlert", {
         fontSize: window.innerWidth * 0.05,
@@ -150,16 +150,10 @@ export class Game {
       }
     });
 
-    // app.nameTitle = new PIXI.Text(``, style)
-    // app.nameTitle.x = 100
-    // app.nameTitle.y = 500
-    // app.stage.addChild(app.nameTitle);
-
-
     const options = { crossOrigin: "*" };
     app.loader.baseUrl = "../static/assets";
     app.loader
-      .add("background", "./static/assets/sheet/background.png")
+      .add("background", "./static/assets/sheet/background.jpeg")
       .add("bunny","https://pixijs.io/examples/examples/assets/bunny.png",options)
       .add("buildings", "./static/assets/sheet/buildings.png")
 
@@ -167,7 +161,7 @@ export class Game {
       setTimeout(() => {
         this.app.preloader.hide();
 
-        // temporary solution for horizontal ratio
+        // temporary solution for horizontal aspect eratio
         if (this.app.renderer.width < this.app.renderer.height) {
           this.app.stage.addChild(this.tempLabels.widescreenSupportAlert.text)
           return
@@ -180,7 +174,7 @@ export class Game {
         })
         this.app.stage.addChild(this.tempLabels.notification.changeTo("premise", 0).chanseFontSize(0.015).text)
 
-        this.addClickToProceedLabel()
+        this.addClickToProceedLabel(this.tempLabels.notification.text.height)
 
 
         this.beginWithContext = this.begin.bind(this)
@@ -191,11 +185,11 @@ export class Game {
     });
   }
 
-  addClickToProceedLabel() {
+  addClickToProceedLabel(height) {
     this.app.stage.addChild(this.tempLabels.subtext
       .chanseFontSize(0.01)
       //.setX(window.innerWidth/2 + this.tempLabels.notification.text.width)
-      .setY(window.innerHeight/2 + this.tempLabels.notification.text.height)
+      .setY(window.innerHeight/2 + height)
       .text
     )
   }
@@ -282,9 +276,9 @@ export class Game {
 
   runFailCondition() {
     this.lostCity++
-    this.app.stage.addChild(this.tempLabels.notification.changeTo("failed").text)
+    this.app.stage.addChild(this.tempLabels.widescreenSupportAlert.changeTo("failed").text)
     this.level.stopGenerateDrops()
-    this.addClickToProceedLabel()
+    this.addClickToProceedLabel(this.tempLabels.widescreenSupportAlert.text.height)
     this.removeStageEntities()
     this.level.increaseDropsLimit()
     this.enableNextStageTap()
@@ -309,7 +303,7 @@ export class Game {
     this.level.dropDropsLimit()
     clearInterval(this.intervals.checkWinConditionInterval)
     this.app.stage.addChild(this.tempLabels.notification.changeTo("victory").text)
-    this.addClickToProceedLabel()
+    this.addClickToProceedLabel(this.tempLabels.notification.text.height)
     this.removeStageEntities()
     this.enableNextStageTap()
     this.level.upgradeUmbrella(0.5)
@@ -334,7 +328,8 @@ export class Game {
     }, 1000)
     setTimeout(() => {
       if (this.isHousesLoaded) return
-      this.tempLabels.notification.changeTo("start")
+      this.app.stage.removeChild(this.tempLabels.widescreenSupportAlert.text)
+      this.app.stage.addChild(this.tempLabels.notification.changeTo("start").text)
       this.isHousesLoaded = true
       this.app.level.initialHousesNumber = 0
       this.level.addHouses(this.app)
@@ -346,7 +341,8 @@ export class Game {
   }
 
   showFullVictoryStage() {
-    this.app.stage.addChild(this.tempLabels.notification.changeToFn("fullVictory", [this.savedCity, this.lostCity]).text)
+    this.app.stage.removeChild(this.tempLabels.notification.text)
+    this.app.stage.addChild(this.tempLabels.widescreenSupportAlert.changeToFn("fullVictory", [this.savedCity, this.lostCity]).text)
   }
 
   enableNextStageTap() {

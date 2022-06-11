@@ -47,10 +47,11 @@
 5. (DONE) Add fullVictory message in the end of game
 
 # TODO V 1.0.1
-1. Scale on zoom. Scale on width change(need for mobile devices)
+1. (cancel) Scale on zoom. Scale on width change(need for mobile devices)
+ 1. (DONE. ADDED wideScreenAlert message)Workaround - reload game. The original task requers a lot of time. Will do it later, after releasing other games.
 
 # TODO V 1.0.2
-2. FIX english fullVictory message(grammar part)
+1. (cancel) FIX english fullVictory message(grammar part)
 
 # TODO V 1.1
 1. Add sounds
@@ -75,3 +76,7 @@
 1. Add the man who randlomly tries to mark some place
 2. Add weapon to deal with such kind of enemy.
 3. Probably it would be great to make drops falls not randomly over the whole area, but randomly over the area covered with houses.
+
+# TODO V 1.3
+ 1. FIX english fullVictory message(grammar part)
+ 2. Scale on zoom. Scale on width change

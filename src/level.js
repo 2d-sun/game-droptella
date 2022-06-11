@@ -8,7 +8,7 @@ function getRandomInt(min, max) {
   return Math.random() * (max - min) + min
 }
 
-const DROPS_LIMIT = 50
+const DROPS_LIMIT = 75
 const UPGRAGE_PRICE = 1000
 
 export default class LevelDrops {
