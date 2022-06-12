@@ -1,6 +1,6 @@
 class Localization {
   static ALLOWED = ["en","uk"]
-  static DEFAULT = "uk"
+  static DEFAULT = "en"
 
   constructor() {
     const p = new URL(location.href).pathname.split("/")
