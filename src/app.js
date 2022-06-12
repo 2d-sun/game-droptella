@@ -10,19 +10,14 @@ import { MouseController } from "./mouse";
 
 export class App {
   constructor() {
-    this.width = window.innerWidth
-    this.height = window.innerHeight
-
     this.application = new PIXI.Application({
       resizeTo: window,
-      width: this.width,
-      height: this.height,
       resolution: 1,
-      // autoResize: true,
-      // resolution: devicePixelRatio
-      // width: 1280,
-      // height: 720,
+      autoResize: true,
+      antialias: window.innerWidth <= 2880 // prevent laging on bigger screens
     })
+
+    window.app = this
 
     this.renderer = this.application.renderer;
     this.ticker = this.application.ticker;

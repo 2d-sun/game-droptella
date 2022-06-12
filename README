@@ -21,21 +21,64 @@
 
 
 # TODO V 1.0
-0. ZOOM
-1. Add persentage to see number of destroyed houses and houses which are left
-2. Add sprites
-  1. Background
-  2. Houses
-  3. Clouds
-  4. Umbrella
-  5. Drops
-3. Add umblrella improvement after level ends
-4. Add limit of drops(reaching the limit of drops means the level is passed). If the pesentage of destroyed houses is to big it means player has lost the city.
-5. Add Reward after 10 saved cities. Video with dead enemy
+0. (DONE) ZOOM
+ 1. (DONE) Scale on load
+ 2. (CANCEL)Scale on zoom
+1. (DONE) Add persentage to see number of destroyed houses and houses which are left
+2. (DONE)Add sprites
+  1. (DONE) Background
+  2. (DONE) Houses
+  3. (CANCEL)Clouds
+  4. (CANCEL)Umbrella
+  5. (CANCEL)Drops
+3. (DONE) Add premise message at the begining of the game
+4. (DONE) Add limit of drops(reaching the limit of drops means the level is passed).
+5. (DONE) If the pesentage of destroyed houses is to big it means player has lost the city.
+  1. (DONE) Stop game, show FAILED label
+  2. (DONE) Move to next level without improvement
+6. (CANCEL) Add Reward after 10 saved cities. Video with dead enemy
+7. (DONE) Add umblrella improvement after level ends
+  1. (DONE) Make it wider
 
+# TODO V 1.0
+1. (DONE) subtract money on upgrade
+2. (DONE) incrase number of bombs for the next stage if failed
+3. (DONE) add onClick event on fail
+5. (DONE) Add fullVictory message in the end of game
+
+# TODO V 1.0.1
+1. (cancel) Scale on zoom. Scale on width change(need for mobile devices)
+ 1. (DONE. ADDED wideScreenAlert message)Workaround - reload game. The original task requers a lot of time. Will do it later, after releasing other games.
+
+# TODO V 1.0.2
+1. (cancel) FIX english fullVictory message(grammar part)
+2. Save data in localStorage
 
 
 # TODO V 1.1
+1. Add sounds
+ 1. Drop sound
+ 2. Catch sound
+ 3. Explosion sound
+2. Add music
+  1. Win melody
+  2. Lose melody
+  3. (DONE) Background melody
+3. Add sprites
+  1. Clouds
+  2. Umbrella
+  3. Drops
+
+# TODO V 1.2
+1. Add explanation message, how it works
+2. Coins production animation. Add animation when house produce coins.
+3. Add Reward after 10 saved cities. Video with dead enemy
+
+# TODO V 1.2
 1. Add the man who randlomly tries to mark some place
 2. Add weapon to deal with such kind of enemy.
 3. Probably it would be great to make drops falls not randomly over the whole area, but randomly over the area covered with houses.
+
+# TODO V 1.3
+ 1. FIX english fullVictory message(grammar part)
+ 2. Scale on zoom. Scale on width change

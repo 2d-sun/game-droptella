@@ -1,17 +1,26 @@
 import * as PIXI from "pixi.js";
 
-const style = new PIXI.TextStyle({
-  fontFamily: "Arial",
-  fontSize: 72,
-  fontWeight: "bold",
-  fill: ["#ffffff"],
-  stroke: "#4a1850",
-  dropShadow: true,
-});
-
 export default class Label {
-  constructor(text,  customStyle = style) {
-    this.text = new PIXI.Text(text, customStyle);
+  constructor(text, customStyle = {}) {
+
+    const fontSize = window.innerWidth * 0.01
+
+    const style = new PIXI.TextStyle({
+      fontFamily: "Arial",
+      fontSize,
+      fontWeight: "bold",
+      fill: ["#bbbbbb"],
+      stroke: "#4a1850",
+      zIndex: 500,
+      dropShadow: true,
+      ...customStyle
+    });
+
+
+    this.text = new PIXI.Text(text, style);
+    this.text.roundPixels = true
+
+    this.#listenResize()
   }
   setX(x) {
     this.text.x = x
@@ -27,5 +36,25 @@ export default class Label {
   }
   get() {
     return this.text
+  }
+
+  setStyle(style) {
+    this.text.style = {
+      ...this.text.style,
+      ...style
+    }
+    return this.text
+  }
+
+  #listenResize() {
+    window.addEventListener("resize", () => {
+      requestAnimationFrame(() => {
+        this.setStyle({fontSize: window.innerWidth * 0.01})
+        this.setY(window.innerHeight * this.topKo)
+        if (this.yes) {
+          console.log(this.text.y)
+        }
+      })
+    })
   }
 }

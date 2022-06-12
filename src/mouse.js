@@ -15,6 +15,10 @@ export class MouseController {
     this.umbrella = null;
   }
 
+  setUmbrella(umbrella) {
+    this.umbrella = umbrella
+  }
+
   init() {
     const { pixiRoot } = this.app.game;
     const { phys } = this.app;
@@ -23,7 +27,7 @@ export class MouseController {
     this.umbrella = this.world.bodies.find(body => body.entity instanceof Umbrella)
 
     pixiRoot.interactive = true;
-    
+
     pixiRoot.on("pointermove", e => {
       const point = pixiRoot.toLocal(e.data.global);
       point.x = -point.x * phys.PIXEL_TO_METER;
@@ -56,6 +60,7 @@ export class MouseController {
   }
 
   _catchDrop(entity) {
+    this.umbrella.velocity = [0, 0]
     this.app.game.incrementCatched()
     this.app.game.remove(entity)
   }
@@ -63,12 +68,19 @@ export class MouseController {
   _missDrop(entity) {
     if (!entity.missed) {
       entity.missed = true
+      setTimeout(() => {
+        this.app.game.remove(entity)
+      }, 0)
+      entity.body.shapes[0].radius *= 2
+      this.app.phys.drawStar(entity.pixiDebug)
       this.app.game.incrementMissed()
     }
   }
 
   _destroyHouse(entity) {
     this.app.game.remove(entity)
+    this.app.game.updateHousesPersentage()
+    this.app.game.checkEndLevelCondition()
   }
 
   setState(state) {
@@ -93,6 +105,7 @@ export class MouseController {
     // this.mouseConstraint.bodyA.wakeUp();
     // this.mouseConstraint.bodyB.wakeUp()
     this.umbrella.position[0] = physicsPosition[0]
+    this.umbrella.velocity = [0, 0]
     //this.umbrella.velocity[0] = Math.ceil(physicsPosition[0] - this.umbrella.position[0]) * 3
   }
 }

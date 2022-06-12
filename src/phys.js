@@ -2,6 +2,10 @@ import * as PIXI from "pixi.js";
 import { Circle, Convex, Plane, World } from "p2";
 import GROUPS from "./entities/groups"
 
+function getRandomInt(min, max) {
+  return Math.round(Math.random() * (max - min) + min)
+}
+
 export class Phys {
   constructor(app) {
     this.app = app;
@@ -107,12 +111,15 @@ export class Phys {
     const groupType = entity.getName()
 
     const debug = (this.debug = new PIXI.Graphics());
+    debug.zIndex = 10
     if (groupType === GROUPS.DROP) {
       shapes.forEach(shape => this._drawDrop(debug, shape, body))
     } else if (groupType === GROUPS.UMBRELLA) {
       shapes.forEach(shape => this._drawConvex(debug, shape, body))
-    } else if (groupType === GROUPS.GROUND) {
-      shapes.forEach(shape => this._drawPlane(debug, shape, body))
+    // } else if (groupType === GROUPS.GROUND) {
+    //   shapes.forEach(shape => this._drawPlane(debug, shape, body))
+    } else if (groupType === GROUPS.HOUSE) {
+      return this._drawHouse(shapes[0])
     } else {
       for (let i = 0; i < shapes.length; i++) {
         const shape = shapes[i];
@@ -130,16 +137,32 @@ export class Phys {
     return debug;
   }
 
+  _drawHouse(shape) {
+    const houseIndex = getRandomInt(0, 4)
+
+    const tex = this.app.game.textures.buildingsTextures[houseIndex]
+    const house = new PIXI.Sprite(tex);
+    house.anchor.set(0.5);
+    house.x = -shape.position[0] * this.METER_TO_PIXEL
+    house.y = -shape.position[1] * this.METER_TO_PIXEL
+    house.width = shape.width * this.METER_TO_PIXEL
+    house.height = shape.height * this.METER_TO_PIXEL
+    house.body = this;
+    house.visible = false
+    house.zIndex = 1000
+    return house
+  }
+
   _drawDrop(debug, shape, body) {
     this._drawCircle(debug, shape)
-    setTimeout(() => {
-      drawStar(0, 0, 12, 30, 10, debug)
-    }, body.destroyMs - 1)
+    // setTimeout(() => {
+    //   this.drawStar(debug)
+    // }, body.destroyMs - (body.destroyMs * 0.01))
   }
 
   _drawCircle(debug, shape) {
     const color = 0.774280154389259 * 0xffffff // almost red
-    debug.lineStyle(3.0, color, 1.0);
+    debug.lineStyle(5/window.devicePixelRatio, color);
     //debug.beginFill(color, 1.0);
     debug.drawCircle(
       -shape.position[0] * this.METER_TO_PIXEL,
@@ -150,10 +173,11 @@ export class Phys {
     debug.lineStyle(0.0);
   }
 
+  // works bad ... replace with box
   _drawPlane(debug, shape, body) {
     debug.lineStyle(10.0, body.color || 0x808080, 1.0);
     debug.moveTo(-2220, 0);
-    debug.lineTo(this.app.width - 10, 0);
+    debug.lineTo(this.app.renderer.width - 10, 0);
   }
 
   _drawConvex(debug, shape, body) {
@@ -197,6 +221,10 @@ export class Phys {
     }
 
     debug.lineStyle(0.0);
+  }
+
+  drawStar(debug) {
+    drawStar(0, 0, 12, 30, 10, debug)
   }
 }
 

@@ -12,11 +12,12 @@ export default class House extends Entity {
 
   #init({position, height = 0.3, width = 0.15}) {
     this.dict.body = new Body({
-      mass: 25,
+      mass: 1000,
       position,
       fixedRotation: true,
-      fixedY: true,
-      fixedX: true
+      // fixedY: true,
+      fixedX: true,
+      //gravityScale: 0,
     });
     
     this.dict.body.addShape(new Box({
