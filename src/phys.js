@@ -113,7 +113,7 @@ export class Phys {
     const debug = (this.debug = new PIXI.Graphics());
     debug.zIndex = 10
     if (groupType === GROUPS.DROP) {
-      shapes.forEach(shape => this._drawDrop(debug, shape, body))
+      return this._drawDrop(debug, shapes[0], body)
     } else if (groupType === GROUPS.UMBRELLA) {
       shapes.forEach(shape => this._drawConvex(debug, shape, body))
     // } else if (groupType === GROUPS.GROUND) {
@@ -154,10 +154,18 @@ export class Phys {
   }
 
   _drawDrop(debug, shape, body) {
-    this._drawCircle(debug, shape)
-    // setTimeout(() => {
-    //   this.drawStar(debug)
-    // }, body.destroyMs - (body.destroyMs * 0.01))
+    const tex = this.app.game.textures.stuffTextures.drop
+    const drop = new PIXI.Sprite(tex);
+
+    drop.anchor.set(0.5);
+    drop.x = -shape.position[0] * this.METER_TO_PIXEL
+    drop.y = -shape.position[1] * this.METER_TO_PIXEL
+    drop.width = shape.width * this.METER_TO_PIXEL
+    drop.height = shape.height * this.METER_TO_PIXEL
+    drop.body = this;
+    drop.visible = true
+    debug.addChild(drop)
+    return debug
   }
 
   _drawCircle(debug, shape) {

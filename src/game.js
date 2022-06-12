@@ -171,6 +171,7 @@ export class Game {
       .add("background", "static/assets/sheet/background.jpeg")
       .add("bunny","https://pixijs.io/examples/examples/assets/bunny.png",options)
       .add("buildings", "static/assets/sheet/buildings.png")
+      .add("stuff", "static/assets/sheet/stuff.png")
       //.add("song1", "./static/assets/audio/Lurking - Silent Partner.mp3")
 
     this.loadAudio()
@@ -273,6 +274,12 @@ export class Game {
       1: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(427, 212, 80, 100)),
       2: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(517, 212, 60, 95)),
       3: new PIXI.Texture(buildingsSheet, new PIXI.Rectangle(582, 212, 60, 95)),
+    }
+
+    const stuffSheet = new PIXI.BaseTexture.from(app.loader.resources["stuff"].url)
+
+    this.textures.stuffTextures = {
+      drop: new PIXI.Texture(stuffSheet, new PIXI.Rectangle(0, 0, 94, 316)),
     }
   }
 

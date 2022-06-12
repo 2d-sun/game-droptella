@@ -1,5 +1,5 @@
 import { Entity } from "./entity"
-import { Body, Circle } from "p2";
+import { Body, Box } from "p2";
 import GROUPS from "./groups"
 
 export default class Drop extends Entity {
@@ -17,16 +17,15 @@ export default class Drop extends Entity {
       position,
       //gravityScale: 2
     });
-    this.dict.body.addShape(new Circle({ 
-      radius
-      //radius: window.innerWidth * radius,
-      //collisionGroup: GROUPS.DROP,
-      //collisionMask: GROUPS.GROUND | GROUPS.UMBRELLA | GROUPS.DROP
+
+    this.dict.body.addShape(new Box({
+      width: radius,
+      height: radius*3,
     }));
 
-    this.dict.body.allowSleep = true;
-    this.dict.body.sleepSpeedLimit = 1; // Body will feel sleepy if speed<1 (speed is the norm of velocity)
-    this.dict.body.sleepTimeLimit =  1;
+    // this.dict.body.allowSleep = true;
+    // this.dict.body.sleepSpeedLimit = 1; // Body will feel sleepy if speed<1 (speed is the norm of velocity)
+    // this.dict.body.sleepTimeLimit =  1;
 
     this.dict.body.destroyMs = destroyMs
 

@@ -246,6 +246,10 @@ export default class LevelDrops {
       let spawnMs = Math.random() < 0.2 ? 500 : 1000
       await new Promise(resolve => setTimeout(resolve, spawnMs));
 
+      if (document.hidden) {
+        continue
+      }
+
       if (!this.generateGrops) continue
 
       options.destroyMs = Math.random() <= 0.1 ? getRandomIntWithStep(1000, 1500, 100) : getRandomIntWithStep(1500, 6000, 1000)
