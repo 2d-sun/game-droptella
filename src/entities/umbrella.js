@@ -35,5 +35,6 @@ export default class Umbrella extends Entity {
       // collisionMask: GROUPS.DROP
     }));
     this.body = this.dict.body
+    this.body.color = 0xffffff
   }
 }

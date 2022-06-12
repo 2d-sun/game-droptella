@@ -166,11 +166,11 @@ export class Game {
     });
 
     const options = { crossOrigin: "*" };
-    app.loader.baseUrl = "../static/assets";
+    // app.loader.baseUrl = "../static/assets";
     app.loader
-      .add("background", "./static/assets/sheet/background.jpeg")
+      .add("background", "static/assets/sheet/background.jpeg")
       .add("bunny","https://pixijs.io/examples/examples/assets/bunny.png",options)
-      .add("buildings", "./static/assets/sheet/buildings.png")
+      .add("buildings", "static/assets/sheet/buildings.png")
       //.add("song1", "./static/assets/audio/Lurking - Silent Partner.mp3")
 
     this.loadAudio()
@@ -460,8 +460,6 @@ export class Game {
 
   isClickOnSupportAttraction(e) {
     const {y, x} = this.supportAtractionCoors
-    console.log("y::", e.clientY, y)
-    console.log("x::", e.clientX, x)
     return x.min < e.clientX && e.clientX < x.max && y.min < e.clientY && e.clientY < y.max
   }
 

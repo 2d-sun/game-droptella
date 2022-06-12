@@ -6,7 +6,7 @@ let http = require('http');
 const PORT = 8080
 
 http.createServer(function (req, res) {
-  const templateFile = `${__dirname}/index.html`; // __dirname + req.url
+  const templateFile = `${__dirname}/../index.html`; // __dirname + req.url
   // fs.readFile(templateFile, function (err,data) {
   //   if (err) {
   //     res.writeHead(404);
