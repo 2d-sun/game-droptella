@@ -60,6 +60,13 @@ export class Game {
 
     this.textures = {}
 
+    this.audioNames = [
+      "1_Court_and_PageSilent_Partner",
+      "2_Drizzle_to_Downpour_Silent_Partner",
+      "3_Event_Departure_Silent_Partner",
+      "4_Far_The_Days_Come_Letter_Box"
+    ]
+
     this.cities = new Array(10)
 
     this.entities = {
@@ -164,6 +171,9 @@ export class Game {
       .add("background", "./static/assets/sheet/background.jpeg")
       .add("bunny","https://pixijs.io/examples/examples/assets/bunny.png",options)
       .add("buildings", "./static/assets/sheet/buildings.png")
+      //.add("song1", "./static/assets/audio/Lurking - Silent Partner.mp3")
+
+    this.loadAudio()
 
     app.loader.load(() => {
       setTimeout(() => {
@@ -222,9 +232,17 @@ export class Game {
       return
     }
 
+    this.myAudioElement.play();
 
     this.app.renderer.view.removeEventListener("touchstart", this.beginWithContext);
     this.app.renderer.view.removeEventListener("mousedown", this.beginWithContext);
+
+
+    Object.values(this.supportUkraineLabels).forEach(label => {
+      this.app.stage.removeChild(label.text)
+    })
+    this.app.stage.removeChild(this.supportAttractionGraphics)
+
     // hide this stuff
     this.app.stage.removeChild(this.tempLabels.notification.text)
     this.removeClickToProceedLabel()
@@ -405,14 +423,14 @@ export class Game {
 
     const graphics = new PIXI.Graphics();
 
-    graphics.lineStyle(25, 0xFEEB77, 1);
+    graphics.lineStyle(window.innerWidth*0.005, 0xFEEB77, 1);
     graphics.drawRect(x, y - y*0.4, width, height);
     graphics.endFill();
 
     graphics.beginFill(0x1305b7);
-    graphics.lineStyle(45, 0x1305b7, 1);
-    graphics.moveTo(x - 20, y * 0.45);
-    graphics.lineTo((window.innerWidth/2 + width/2) + 15, y * 0.45);
+    graphics.lineStyle(window.innerWidth*0.005, 0x1305b7, 1);
+    graphics.moveTo(x - window.innerWidth*0.003, y * 0.45);
+    graphics.lineTo((window.innerWidth/2 + width/2) + window.innerWidth*0.002, y * 0.45);
     graphics.closePath();
     graphics.endFill();
 
@@ -436,6 +454,8 @@ export class Game {
           this.supportUkraineLabels.supportUkrainePrytula.text.y)
       }
     }
+
+    this.supportAttractionGraphics = graphics
   }
 
   isClickOnSupportAttraction(e) {
@@ -443,5 +463,20 @@ export class Game {
     console.log("y::", e.clientY, y)
     console.log("x::", e.clientX, x)
     return x.min < e.clientX && e.clientX < x.max && y.min < e.clientY && e.clientY < y.max
+  }
+
+  loadAudio(index = 0) {
+    // const myAudioElement = new Audio("static/assets/audio/Lurking_Silent_Partner.mp3");
+    this.myAudioElement = new Audio(`static/assets/audio/${this.audioNames[index]}.mp3`);
+
+
+    this.myAudioElement.addEventListener('ended', (event) => {
+      this.loadAudio(this.getNextIndex(index))
+      this.myAudioElement.play()
+    });
+  }
+
+  getNextIndex(index) {
+    return index % this.audioNames.length
   }
 }

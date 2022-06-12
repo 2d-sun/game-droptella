@@ -52,6 +52,8 @@
 
 # TODO V 1.0.2
 1. (cancel) FIX english fullVictory message(grammar part)
+2. Save data in localStorage
+
 
 # TODO V 1.1
 1. Add sounds
@@ -61,7 +63,7 @@
 2. Add music
   1. Win melody
   2. Lose melody
-  3. Background melody
+  3. (DONE) Background melody
 3. Add sprites
   1. Clouds
   2. Umbrella
