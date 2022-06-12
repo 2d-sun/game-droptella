@@ -173,7 +173,7 @@ export default class LevelDrops {
       const height = this._getHouseHeight()
       const options = {
         mass: 5000,
-        position: [x, this.options.ymin + height],
+        position: [x, this.options.ymin * 1.01 + height],
         width: houseWidth,
         height
       }

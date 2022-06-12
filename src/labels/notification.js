@@ -7,10 +7,11 @@ export default class Notification extends Label {
     super(localization[localizationKey], {
       fontSize: window.innerWidth * 0.3,
       wordWrap: true,
-      wordWrapWidth: window.innerWidth/4,
+      wordWrapWidth: window.innerHeight < 500 ? window.innerWidth : window.innerWidth/4,
+      dropShadow: false,
       ...options
     })
-    this.text.y = window.innerHeight/2
+    this.text.y = window.innerHeight/2 - this.text.height/2
     this.text.x = window.innerWidth/2
     this.text.anchor.set(0.5);
   }

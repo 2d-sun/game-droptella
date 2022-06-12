@@ -22,6 +22,11 @@ export default class Label {
 
     this.#listenResize()
   }
+
+  setAnchor(anchor) {
+    this.text.anchor.set(anchor);
+  }
+
   setX(x) {
     this.text.x = x
     return this

@@ -88,7 +88,7 @@ export class Game {
       subtext: new Notification("clickToProceed", {dropShadow: false, fill: ['#fff']}),
       tryAgain: new Notification("tryAgain"),
       widescreenSupportAlert: new Notification("widescreenRatioSupportAlert", {
-        fontSize: window.innerWidth * 0.05,
+        fontSize: window.innerWidth * (window.innerHeight < 500 ? 0.03 : 0.05),
         wordWrapWidth: window.innerWidth
       })
     }
@@ -203,7 +203,7 @@ export class Game {
           .changeTo("premise", 0)
           .chanseFontSize(0.015).text)
 
-        this.addClickToProceedLabel(this.tempLabels.notification.text.height, this.drawSupportAttractionY + this.tempLabels.notification.text.height*0.6)
+        this.addClickToProceedLabel(this.drawSupportAttractionY + this.tempLabels.notification.text.height, false)
 
 
         this.beginWithContext = this.begin.bind(this)
@@ -214,11 +214,14 @@ export class Game {
     });
   }
 
-  addClickToProceedLabel(height, y) {
+  addClickToProceedLabel(y, multiply=true) {
+    // if (multiply && window.innerHeight < 500) {
+    //   y*=2
+    // }
     this.app.stage.addChild(this.tempLabels.subtext
       .chanseFontSize(0.01)
       //.setX(window.innerWidth/2 + this.tempLabels.notification.text.width)
-      .setY(y || window.innerHeight/2 + height)
+      .setY(y)
       .text
     )
   }
@@ -247,7 +250,6 @@ export class Game {
     // hide this stuff
     this.app.stage.removeChild(this.tempLabels.notification.text)
     this.removeClickToProceedLabel()
-    this.tempLabels.notification.changeTo("failed").chanseFontSize(0.04)
 
     // init level
     this.app.runners.initLevel.run(this.level);
@@ -315,25 +317,30 @@ export class Game {
   }
 
   checkEndLevelCondition() {
-    if (
-      (this.level.initialHousesNumber > FAILED_HOUSE_HUMBER_CONDITION &&  this.houses.length <= FAILED_HOUSE_HUMBER_CONDITION) ||
-      (this.level.initialHousesNumber <= FAILED_HOUSE_HUMBER_CONDITION && this.houses.length <= 0)
-    ) {
-      this.runFailCondition()
-    }
+    if (this.win) return
+    if (this.houses.length <= FAILED_HOUSE_HUMBER_CONDITION) this.runFailCondition()
+    // if (
+    //   (this.level.initialHousesNumber > FAILED_HOUSE_HUMBER_CONDITION &&  this.houses.length <= FAILED_HOUSE_HUMBER_CONDITION) ||
+    //   (this.level.initialHousesNumber <= FAILED_HOUSE_HUMBER_CONDITION && this.houses.length <= 0)
+    // ) {
+    //   this.runFailCondition()
+    // }
   }
 
   runFailCondition() {
+    this.lost = true
     this.lostCity++
     this.app.stage.addChild(this.tempLabels.widescreenSupportAlert.changeTo("failed").text)
     this.level.stopGenerateDrops()
-    this.addClickToProceedLabel(this.tempLabels.widescreenSupportAlert.text.height)
+    this.addClickToProceedLabel(this.tempLabels.widescreenSupportAlert.text.y + this.tempLabels.widescreenSupportAlert.text.height/2, false)
     this.removeStageEntities()
     this.level.increaseDropsLimit()
     this.enableNextStageTap()
   }
 
   checkWinCondition() {
+    if (this.lost) return
+    this.win = true
     this.level.stopGenerateDrops()
 
     this.intervals.checkWinConditionInterval = setInterval(() => {
@@ -353,8 +360,12 @@ export class Game {
     this.savedCity++
     this.level.dropDropsLimit()
     clearInterval(this.intervals.checkWinConditionInterval)
-    this.app.stage.addChild(this.tempLabels.notification.changeToFn("victory", [savedHouses, lostHouses]).text)
-    this.addClickToProceedLabel(this.tempLabels.notification.text.height)
+
+    this.tempLabels.notification.changeToFn("victory", [savedHouses, lostHouses])
+    this.tempLabels.notification.setY(window.innerHeight/2)
+
+    this.app.stage.addChild(this.tempLabels.notification.text)
+    this.addClickToProceedLabel(this.tempLabels.notification.text.y + this.tempLabels.notification.text.height/2)
     this.removeStageEntities()
     this.enableNextStageTap()
     this.level.upgradeUmbrella(0.5)
@@ -364,6 +375,10 @@ export class Game {
     if (this.isNextStageLoads) {
       return
     }
+
+    this.win = false
+    this.lost = false
+
     this.stagesToFullVictory--
     this.isNextStageLoads = true
     this.removeClickToProceedLabel()
