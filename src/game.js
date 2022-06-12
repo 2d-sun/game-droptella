@@ -341,10 +341,12 @@ export class Game {
   }
 
   runWinCondition() {
+    const savedHouses = this.houses.length
+    const lostHouses  = this.level.initialHousesNumber - this.houses.length
     this.savedCity++
     this.level.dropDropsLimit()
     clearInterval(this.intervals.checkWinConditionInterval)
-    this.app.stage.addChild(this.tempLabels.notification.changeTo("victory").text)
+    this.app.stage.addChild(this.tempLabels.notification.changeToFn("victory", [savedHouses, lostHouses]).text)
     this.addClickToProceedLabel(this.tempLabels.notification.text.height)
     this.removeStageEntities()
     this.enableNextStageTap()

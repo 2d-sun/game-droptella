@@ -9,7 +9,9 @@ export default {
     "The enemy has failed. But they still have bombs. Protect our towns, while we will take care of their command centres."
   ],
   clickToProceed: "(click to proceed)",
-  victory: "VICTORY",
+  victory: (savedBuilding, lostBuilding) => {
+    return `The number of buildings you have lost: ${lostBuilding}. The number of building you have saved: ${savedBuilding}`
+  },
   fullVictory: (savedCity, lostCity) => {
     const constantMessage = "We won. We eliminated the enemy. The world is save now."
 

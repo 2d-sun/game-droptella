@@ -9,7 +9,9 @@ export default {
     "Ворог зазнав невдачі. Але у них все ще є бомби. Захисти наші міста, а ми подбаємо про їхні командні центри."
   ],
   clickToProceed: "(Клацніть, щоб продовжити)",
-  victory: "ПЕРЕМОГА",
+  victory: (savedBuilding, lostBuilding) => {
+    return `Кількість втрачених будинків: ${lostBuilding}. Кількість врятованих будинків: ${savedBuilding}`
+  },
   fullVictory: (savedCity, lostCity) => {
     const constantMessage = "Ми перемогли. Ми знищили ворога, тож він тепер нікому не завдасть шкоди."
 
